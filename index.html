@@ -1,132 +1,218 @@
-const SHEET_ID = '1t7u7aMsj3imueMN6Qa0OPcaLWnnpg2i7aRLLJCF0NUE';
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<!-- 311／1811 iPhone / iPad / PWA icons -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b2d61">
+<meta name="build-version" content="countdown-v4">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="311／1811">
+<title>311／1811 青少年活動站</title>
+<style>
+:root{--navy:#0b2d61;--blue:#1769d2;--blue2:#2e7de1;--ink:#172033;--muted:#667085;--line:#dbe3ee;--bg:#f4f7fb;--card:#fff;--gold:#d99a00;--green:#16833d;--orange:#f47a16}
+*{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,#edf4fb 0,#f7f9fc 360px);color:var(--ink)}a{color:inherit}button{font:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:50;background:rgba(11,45,97,.96);backdrop-filter:blur(12px);color:#fff;box-shadow:0 2px 12px #0002}
+.head{max-width:1160px;margin:auto;padding:12px 14px;display:flex;align-items:center;gap:10px}.brand{display:flex;align-items:center;gap:9px;min-width:0;flex:1}.brandMark{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center;color:var(--navy);font-weight:900;font-size:12px}.brandText{min-width:0}.brandText b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brandText small{font-size:10px;color:#dce9fb}.headerBtn{border:1px solid #ffffff55;background:#ffffff15;color:#fff;border-radius:10px;padding:8px 10px;font-weight:700}
+main{max-width:1160px;margin:auto;padding:14px}.hero{background:linear-gradient(135deg,#103b78,#1769d2);color:#fff;border-radius:22px;padding:22px;margin-bottom:14px;box-shadow:0 12px 30px #103b7824}.heroTop{display:flex;gap:14px;align-items:flex-start}.hero h1{font-size:29px;line-height:1.25;margin:0 0 7px}.hero p{font-size:14px;color:#dce9fb;line-height:1.65;margin:0}.heroButtons{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.heroBtn{border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:11px;padding:10px 13px;font-weight:800;text-decoration:none}.heroMeta{margin-top:15px;display:flex;gap:9px;flex-wrap:wrap}.chip{background:#ffffff15;border:1px solid #ffffff28;padding:7px 10px;border-radius:999px;font-size:12px}
+.quickNav{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}.q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 8px;text-align:center;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 3px 12px #17365d08}.q span{display:block;font-size:21px;margin-bottom:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 4px 18px #17365d0b;margin-bottom:14px}.card h2{font-size:19px;margin:0 0 5px}.sub{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:12px}.sectionHead{display:flex;gap:10px;align-items:flex-start}.sectionHead>div:first-child{flex:1}
+.notice{border-left:5px solid var(--orange);background:#fff9f3}.notice strong{color:#a44d00}.noticeList{margin:8px 0 0;padding-left:20px;font-size:14px;line-height:1.7}
+.nextGrid{display:grid;grid-template-columns:1.3fr .7fr;gap:12px}.eventBox{background:linear-gradient(135deg,#f8fbff,#edf5ff);border:1px solid #cedef4;border-radius:16px;padding:15px}.eventStatus{display:inline-block;background:#e7eef8;color:#4b6483;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800}.eventTitle{font-size:23px;font-weight:900;margin:10px 0 5px}.eventDetail{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.detail{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px}.detail small{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}.detail b{font-size:13px}.actionRow{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 13px;border-radius:11px;text-decoration:none;border:0;font-weight:850}.btn.primary{background:var(--blue);color:#fff}.btn.secondary{background:#eaf1fb;color:#154b8d}.btn.green{background:#edf8ef;color:#216d34}.btn.disabled{background:#eef1f5;color:#98a2b3;pointer-events:none}
+.countdown{background:#0d356f;color:#fff;border-radius:16px;padding:15px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:100%}.countdown small{color:#cfe0f5}.countdownBig{font-size:25px;font-weight:950;margin:8px 0}.countCells{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.countCell{background:#ffffff12;border-radius:9px;padding:8px 4px}.countCell b{display:block;font-size:20px}.countCell span{font-size:9px;color:#dce9fb}
+.tabs{display:flex;gap:7px;margin:10px 0}.tab{border:0;border-radius:999px;background:#eef2f6;color:#506070;padding:8px 12px;font-weight:800}.tab.active{background:#0b63ce;color:#fff}.plan{display:none}.plan.active{display:block}.timeline{position:relative;margin-left:9px;padding-left:20px;border-left:2px solid #d9e6f5}.timelineItem{position:relative;padding:0 0 14px}.timelineItem:before{content:"";position:absolute;left:-27px;top:4px;width:12px;height:12px;border-radius:50%;background:#1769d2;border:3px solid #e8f2ff}.time{font-size:11px;font-weight:900;color:#1769d2}.tlTitle{font-weight:850;margin-top:2px}.tlNote{font-size:12px;color:var(--muted);margin-top:2px}
+.mediaGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.photoCard,.videoCard{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff}.photoCard img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}.videoCard video{display:block;width:100%;aspect-ratio:16/10;background:#000}.mediaBody{padding:10px}.mediaTitle{font-weight:850;margin-bottom:7px}.mediaActions{display:flex;gap:7px;flex-wrap:wrap}
+.archiveGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.archive{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.archiveDate{font-size:11px;color:#1769d2;font-weight:900}.archiveTitle{font-weight:900;margin:5px 0}.archiveText{font-size:12px;color:var(--muted);line-height:1.5}.archiveLink{display:inline-block;margin-top:9px;color:#1769d2;font-size:12px;font-weight:800;text-decoration:none}
+.qrGrid{display:grid;grid-template-columns:150px 1fr;gap:15px;align-items:center}.qrGrid img{width:150px;height:150px;border:1px solid var(--line);border-radius:14px;padding:6px;background:#fff}.installBox{background:#f7f9fc;border:1px solid var(--line);border-radius:14px;padding:12px}.installBox ol{margin:7px 0 0;padding-left:19px;font-size:12px;line-height:1.7}
+.footer{text-align:center;color:#98a2b3;font-size:11px;padding:10px 0 86px}
+.bottomNav{display:none}
+.modalBack{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:flex-end;justify-content:center}.modalBack.show{display:flex}.modal{background:#fff;width:min(560px,100%);border-radius:20px 20px 0 0;padding:18px;max-height:85vh;overflow:auto}.modal h3{margin:0 0 8px}.close{float:right;border:0;background:#eef2f6;border-radius:999px;width:36px;height:36px;font-weight:900}
+@media(max-width:780px){main{padding:9px}.hero{padding:16px;border-radius:16px}.hero h1{font-size:23px}.heroButtons{display:none}.quickNav{grid-template-columns:repeat(3,1fr)}.nextGrid,.mediaGrid{grid-template-columns:1fr}.archiveGrid{grid-template-columns:1fr}.eventDetail{grid-template-columns:1fr 1fr}.qrGrid{grid-template-columns:110px 1fr}.qrGrid img{width:110px;height:110px}.bottomNav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 5px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #0001}.bottomNav a{text-align:center;text-decoration:none;font-size:9px;color:#667085;font-weight:800}.bottomNav span{display:block;font-size:19px;margin-bottom:2px}}
+</style>
+<style>.v2-loading main{visibility:hidden}</style></head>
+<body class="v2-loading">
+<header>
+ <div class="head">
+  <div class="brand"><div class="brandMark">311<br>1811</div><div class="brandText"><b>311／1811 青少年活動站</b><small>活動資訊・報名・回顧</small></div></div>
+  <button class="headerBtn" onclick="shareSite()">分享</button>
+ </div>
+</header>
+<main>
 
-function doGet(e) {
-  try {
-    const action = String((e && e.parameter && e.parameter.action) || 'public');
-    if (action === 'health') return json_({ok:true, service:'311-1811-v2', time:new Date().toISOString()});
-    if (action === 'public') return json_({ok:true, data:readPublic_(), time:new Date().toISOString()});
-    return json_({ok:false, error:'unknown_action'});
-  } catch (err) {
-    return json_({ok:false, error:String(err && err.message || err)});
-  }
-}
+<section class="hero">
+ <div class="heroTop">
+  <div>
+   <h1>本週操練項目</h1>
+   <p><strong>操練日期：8/24～8/30</strong></p>
+   <p style="margin-top:10px;font-size:16px;line-height:1.8">
+     ① 每天操練對主說：「主耶穌，我愛你。」一百遍。<br>
+     ② 每天花 10 分鐘認真呼求主名。
+   </p>
+   <p style="margin-top:8px">以上兩項，每天可以二選一操練，也可以兩項都操練！</p>
+  </div>
+  <div class="heroButtons">
+    <a class="heroBtn" href="#next">下一次活動</a>
+    <a class="heroBtn" href="#recent">活動回顧</a>
+  </div>
+ </div>
+ <div class="heroMeta">
+   <span class="chip">❤️ 愛主操練</span>
+   <span class="chip">📣 本週提醒</span>
+   <span class="chip">🗓️ 8/24～8/30</span>
+   <span class="chip">📱 可加入主畫面</span>
+ </div>
+</section>
 
-function doPost(e) {
-  try {
-    const raw = (e && e.postData && e.postData.contents) || (e && e.parameter && e.parameter.payload) || '{}';
-    const body = typeof raw === 'string' ? JSON.parse(raw) : raw;
-    const token = String(body.token || '');
-    const expected = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
-    if (!expected || token !== expected) return json_({ok:false, error:'unauthorized'});
-    if (body.action === 'save') {
-      saveEditable_(body.data || {});
-      return json_({ok:true, data:readPublic_(), time:new Date().toISOString()});
-    }
-    return json_({ok:false, error:'unknown_action'});
-  } catch (err) {
-    return json_({ok:false, error:String(err && err.message || err)});
-  }
-}
 
-function readPublic_() {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
-  const events = table_(ss.getSheetByName('活動'));
-  return {
-    notice: objectWithItems_(ss.getSheetByName('公告')),
-    practice: objectWithItems_(ss.getSheetByName('本週操練')),
-    event: events.filter(r => String(r.lifecycle || '').toLowerCase() === 'current')[0] || null,
-    events: events,
-    archive: table_(ss.getSheetByName('歷次活動')),
-    templates: table_(ss.getSheetByName('活動模板'))
-  };
-}
+<nav class="quickNav">
+ <a class="q" href="#next"><span>🗓️</span>下一次活動</a>
+ <a class="q" href="#signup"><span>📝</span>活動報名</a>
+ <a class="q" href="#notice"><span>📣</span>最新公告</a>
+ <a class="q" href="#recent"><span>📸</span>近期回顧</a>
+ <a class="q" href="#archive"><span>🗂️</span>歷次活動</a>
+ <a class="q" href="#share"><span>📱</span>分享／加入</a>
+</nav>
 
-function saveEditable_(data) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
-    if (data.notice) writeObjectRow_(ss.getSheetByName('公告'), data.notice);
-    if (data.practice) writeObjectRow_(ss.getSheetByName('本週操練'), data.practice);
-    if (data.event) upsertCurrentEvent_(ss.getSheetByName('活動'), data.event);
-    if (data.archiveEvent) archiveEvent_(ss.getSheetByName('活動'), data.archiveEvent);
-  } finally {
-    lock.releaseLock();
-  }
-}
 
-function table_(sheet) {
-  if (!sheet) return [];
-  const values = sheet.getDataRange().getDisplayValues();
-  if (values.length < 2) return [];
-  const headers = values[0].map(String);
-  return values.slice(1).filter(r => r.some(Boolean)).map(r => {
-    const o = {}; headers.forEach((h,i) => o[h] = r[i] == null ? '' : String(r[i])); return o;
-  });
-}
+<section id="notice" class="card notice">
+ <div class="sectionHead">
+   <div><h2>最新公告</h2><div class="sub">重要變更會優先放在這裡。</div></div>
+   <strong>8/29～8/30 活動開放報名中</strong>
+ </div>
+ <ul class="noticeList">
+   <li>8/29（六）～8/30（日）為「台南青少年成全及集中主日」，請青少年於活動前完成報名。</li>
+   <li>8/29（六）09:30 集合，地點為裕忠路會所 B 中會場。</li>
+   <li>費用每人 250 元，報到時繳交。</li>
+ </ul>
+</section>
 
-function objectFromFirstDataRow_(sheet) {
-  const rows = table_(sheet);
-  return rows[0] || {};
-}
 
-function objectWithItems_(sheet) {
-  const object = objectFromFirstDataRow_(sheet);
-  if (!object) return {};
-  if (!Array.isArray(object.items)) {
-    object.items = Object.keys(object)
-      .filter(k => /^item\d+$/i.test(k))
-      .sort((a, b) => Number(a.slice(4)) - Number(b.slice(4)))
-      .map(k => object[k])
-      .filter(Boolean);
-  }
-  return object;
-}
 
-function writeObjectRow_(sheet, obj) {
-  const headers = sheet.getRange(1,1,1,sheet.getLastColumn()).getDisplayValues()[0];
-  const row = headers.map(h => obj[h] == null ? '' : String(obj[h]));
-  sheet.getRange(2,1,1,row.length).setValues([row]);
-}
+<section id="next" class="card">
+ <div class="sectionHead">
+   <div>
+     <h2>下一次活動</h2>
+     <div class="sub">活動倒數、報名、集合地點與導航都集中在這裡。</div>
+   </div>
+   <span class="eventStatus">開放報名中</span>
+ </div>
+ <div class="nextGrid">
+   <div class="eventBox">
+     <div class="eventTitle">台南青少年成全及集中主日</div>
+     <div class="sub">8/29（六）～8/30（日）</div>
+     <div class="eventDetail">
+       <div class="detail"><small>集合時間</small><b>09:30</b></div>
+       <div class="detail"><small>集合地點</small><b>裕忠路會所 B 中會場</b></div>
+       <div class="detail"><small>參加對象</small><b>所有青少年</b></div>
+       <div class="detail"><small>費用</small><b>每人 250 元，報到時繳交</b></div>
+     </div>
+     <div class="detail" style="margin:10px 0 12px">
+       <small>攜帶物品</small>
+       <b style="display:block;line-height:1.7">
+       紙本聖經（含註節）；紙本詩歌本、詩歌補充本；暑期真理學校課本（一）《救恩》；
+       聚會著正式服裝，可帶運動服裝更換；盥洗用品、盥洗衣物、個人藥物。
+       </b>
+     </div>
+     <div id="signup" class="actionRow">
+       <a class="btn primary" href="https://forms.gle/7kQgJGa2CWX4sWZ3A" target="_blank" rel="noopener">立即報名</a>
+       <a class="btn green" href="https://maps.app.goo.gl/TprmB2BoiPq3grov7?g_st=ic" target="_blank" rel="noopener">Google Maps 導航</a>
+     </div>
+   </div>
+   <div class="countdown">
+     <small>距離活動開始</small>
+     <div id="countTitle" class="countdownBig">8月29日（六）09:30</div>
+     <div class="countCells">
+       <div class="countCell"><b id="cdD">--</b><span>天</span></div>
+       <div class="countCell"><b id="cdH">--</b><span>時</span></div>
+       <div class="countCell"><b id="cdM">--</b><span>分</span></div>
+       <div class="countCell"><b id="cdS">--</b><span>秒</span></div>
+     </div>
+   </div>
+ </div>
+</section>
 
-function upsertCurrentEvent_(sheet, obj) {
-  const headers = sheet.getRange(1,1,1,sheet.getLastColumn()).getDisplayValues()[0];
-  const values = sheet.getDataRange().getDisplayValues();
-  const lifecycleIndex = headers.indexOf('lifecycle');
-  const idIndex = headers.indexOf('event_id');
-  const eventId = String(obj.event_id || '').trim();
-  let target = -1;
-  for (let i=1;i<values.length;i++) {
-    const sameId = idIndex >= 0 && eventId && String(values[i][idIndex]).trim() === eventId;
-    const isCurrent = lifecycleIndex >= 0 && String(values[i][lifecycleIndex]).trim().toLowerCase() === 'current';
-    if (sameId || isCurrent) { target=i+1; break; }
-  }
-  const row = headers.map(h => obj[h] == null ? '' : String(obj[h]));
-  if (lifecycleIndex >= 0 && !row[lifecycleIndex]) row[lifecycleIndex] = 'current';
-  if (target < 0) {
-    sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
-  } else {
-    sheet.getRange(target, 1, 1, row.length).setValues([row]);
-  }
-}
 
-function archiveEvent_(sheet, obj) {
-  const headers = sheet.getRange(1,1,1,sheet.getLastColumn()).getDisplayValues()[0];
-  const values = sheet.getDataRange().getDisplayValues();
-  const idIndex = headers.indexOf('event_id');
-  const lifecycleIndex = headers.indexOf('lifecycle');
-  const eventId = String(obj.event_id || '').trim();
-  if (!eventId || idIndex < 0 || lifecycleIndex < 0) throw new Error('archive_requires_event_id');
-  for (let i=1;i<values.length;i++) {
-    if (String(values[i][idIndex]).trim() === eventId) {
-      sheet.getRange(i + 1, lifecycleIndex + 1).setValue('archived');
-      return;
-    }
-  }
-  throw new Error('event_not_found');
-}
 
-function json_(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+<section id="event-plan" class="card">
+ <h2>活動方案</h2>
+ <div class="sub">本次活動為統一方案，沒有晴天／雨天之分。</div>
+ <div class="timeline">
+   <div class="timelineItem">
+     <div class="time">8/29 09:30</div>
+     <div class="tlTitle">報到與集合</div>
+     <div class="tlNote">裕忠路會所 B 中會場；報到時繳交費用 250 元。</div>
+   </div>
+   <div class="timelineItem">
+     <div class="time">8/29～8/30</div>
+     <div class="tlTitle">台南青少年成全及集中主日</div>
+     <div class="tlNote">詳細聚會流程若後續公布，可再補充於此。</div>
+   </div>
+ </div>
+</section>
+
+
+<section id="recent" class="card">
+ <h2>近期活動回顧</h2><div class="sub">2026/08/22｜AR 躲避球＆外出相調</div>
+ <div class="mediaGrid">
+   <article class="photoCard"><a href="featured-photo.jpg" target="_blank"><img src="featured-photo.jpg" alt="8/22 活動大合照"></a><div class="mediaBody"><div class="mediaTitle">活動大合照</div><div class="mediaActions"><a class="btn secondary" href="featured-photo.jpg" target="_blank">看大圖</a><a class="btn green" href="featured-photo.jpg" download>下載照片</a></div></div></article>
+   <article class="videoCard"><video controls playsinline preload="metadata" poster="featured-video-poster.jpg"><source src="featured-video.mp4" type="video/mp4"></video><div class="mediaBody"><div class="mediaTitle">活動精彩影片</div><div class="mediaActions"><a class="btn green" href="featured-video.mp4" download>下載影片</a></div></div></article>
+ </div>
+ <div class="actionRow" style="margin-top:12px"><a class="btn primary" href="https://1drv.ms/f/c/acfc6696e5eebffa/IgABhg5cP6UKR693dS68dDZWASKFDzL5w2LRSWq5WMZuepo" target="_blank" rel="noopener">開啟完整活動雲端</a><a class="btn secondary" href="#score">查看 8/22 比賽結果</a></div>
+</section>
+
+<section id="score" class="card">
+ <h2>8/22 AR 躲避球賽事</h2><div class="sub">保留當天即時賽事系統入口；公開頁可查看隊伍、比分、排名與最終冠軍。</div>
+ <div class="actionRow"><a class="btn primary" href="score.html">開啟賽事結果</a><a class="btn secondary" href="https://1drv.ms/f/c/acfc6696e5eebffa/IgABhg5cP6UKR693dS68dDZWASKFDzL5w2LRSWq5WMZuepo" target="_blank">照片／影片雲端</a></div>
+</section>
+
+<section id="archive" class="card">
+ <h2>歷次活動</h2><div class="sub">活動會依日期累積，成為 311／1811 的活動回憶冊。</div>
+ <div class="archiveGrid">
+   <article class="archive"><div class="archiveDate">2026.08.22</div><div class="archiveTitle">AR 躲避球＆外出相調</div><div class="archiveText">四隊賽事、活動大合照、精彩影片與完整活動雲端。</div><a class="archiveLink" href="#recent">查看活動回顧 →</a></article>
+   <article class="archive"><div class="archiveDate">COMING SOON</div><div class="archiveTitle">下一次活動</div><div class="archiveText">新的活動結束後會自動累積在這裡。</div></article>
+   <article class="archive"><div class="archiveDate">311／1811</div><div class="archiveTitle">活動回憶持續累積</div><div class="archiveText">未來可再依年份、活動類型或地點分類。</div></article>
+ </div>
+</section>
+
+<section id="share" class="card">
+ <h2>分享活動站／加入主畫面</h2><div class="sub">網址固定不變，以後活動內容更新也可以繼續使用同一個 QR Code。</div>
+ <div class="qrGrid"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQAAAAAab1qeAAACa0lEQVR4nO1ay47bQAwji/z/L7MHUvL0UniLYmUtPAEcJyZgiZjRm8LN9esu8EW+yP+GhGqDCoAk/yGhPgXbotEs8gMzCUIgQFEQKECoL4DTcm5BfgCAZo1iXcxrc6lxORciQyEl+tBT4Le9/YcgP8c9BQCioPB40LlGowfwGadjAwr4Ivrs19MtGs3z2buQoigCdcXxdItG43z+EdH7sFPmkVfAtEaj+fhTKtoEOSLNPzowWzSaRdqHi6HOUWh+UihTqmk5NyElSKQNJQGH8vZPdkhv/PklJBlLSQm1Q0EQ2ah8hpw7kOpzDZlJ0d/ep3k6LucKpPNNAaLzIyebAKDY0djWLRqN8xkWRYfvbTaZ+yC2aDSOFNtOqlisqIkXqeNy7kGW2bQrZ8ImJZ63b3qCnAuQXU92GRlSbhLPlyV94/l76/LtQE62wCMA7cB+i0bjfFJUeNVZosvGrXRpi0bj/t39Dbbh7KTzNKvTcm5BZkuGzvSMsmkp9pGflnMRkkrEWc79bMYRSTfn5dyCTKM43Th06TNWoKoj43KuQFIJNqvHWTuzkqW2oVs0GvdH5kxuEnf9U66TMOWSaTkXIW02We1iNIMgUxV5hJyLkJmyMXHVivP2JCm+9vP2cr7ZWefZnTu7Sm++eW9Rxy3rbF/dIzVki0bj/igZZk2FVaKUuaUmfItG43xe83W6Is+KkroyskajByDd22T3Nh2F6nr0+qO765gHq2mw+Hfx2qVv//1fkOwRMAAgpLKh3/H2H4SUugyPZO9lTa+K6APkXIA85+czveSBpkSf10D9Fo0eE38OvP1Fvsi/r9/40VNRKOmUDgAAAABJRU5ErkJggg==" alt="311/1811 活動站 QR Code"><div>
+   <div class="mediaTitle">掃描 QR Code 開啟活動站</div>
+   <div class="actionRow"><button class="btn primary" onclick="shareSite()">分享網站</button><button class="btn secondary" onclick="showInstall()">加入手機主畫面</button></div>
+   <div class="installBox" style="margin-top:9px"><b>iPhone／iPad</b><ol><li>用 Safari 開啟本站</li><li>點「分享」</li><li>選「加入主畫面」</li></ol></div>
+ </div></div>
+</section>
+
+<div class="footer">311／1811 青少年活動站｜活動資訊以最新公告為準</div>
+</main>
+
+<nav class="bottomNav">
+ <a href="#next"><span>🗓️</span>活動</a><a href="#notice"><span>📣</span>公告</a><a href="#recent"><span>📸</span>回顧</a><a href="#archive"><span>🗂️</span>歷次</a><a href="#share"><span>📱</span>分享</a>
+</nav>
+
+<div id="planModal" class="modalBack" onclick="if(event.target===this)closeModal('planModal')"><div class="modal"><button class="close" onclick="closeModal('planModal')">×</button><h3>下一次活動流程</h3><p class="sub">目前尚未公布。之後會在這裡顯示集合時間、車程、活動、用餐與回程等完整時間軸。</p></div></div>
+<div id="installModal" class="modalBack" onclick="if(event.target===this)closeModal('installModal')"><div class="modal"><button class="close" onclick="closeModal('installModal')">×</button><h3>加入手機主畫面</h3><p>iPhone／iPad：用 Safari 開啟本站 → 點下方「分享」按鈕 → 選「加入主畫面」。之後可以像 App 一樣從桌面開啟。</p><p>Android：用 Chrome 開啟本站，瀏覽器通常會提供「安裝」或「新增至主畫面」。</p></div></div>
+
+<script src="v2/config.js"></script>
+<script src="v2/api.js"></script>
+<script>
+(()=>{
+'use strict';let timer;const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));const url=v=>/^https:\/\//i.test(String(v||'').trim())?String(v).trim():'#';
+function practice(p){const h=document.querySelector('.hero');if(!h)return;const a=Array.isArray(p?.items)?p.items:[];h.innerHTML='<div class="heroTop"><div><h1>'+esc(p?.title||'本週操練項目')+'</h1><p><strong>操練日期：'+esc(p?.date_range||'')+'</strong></p><p style="margin-top:10px;font-size:16px;line-height:1.8">'+a.map((x,i)=>(i+1)+'. '+esc(x)).join('<br>')+'</p>'+(p?.note?'<p style="margin-top:8px">'+esc(p.note)+'</p>':'')+'</div><div class="heroButtons"><a class="heroBtn" href="#next">下一次活動</a><a class="heroBtn" href="#recent">活動回顧</a></div></div><div class="heroMeta"><span class="chip">❤️ 愛主操練</span><span class="chip">📣 本週提醒</span><span class="chip">🗓️ '+esc(p?.date_range||'')+'</span><span class="chip">📱 可加入主畫面</span></div>'}
+function notice(n){const e=document.querySelector('#notice');if(!e)return;const a=Array.isArray(n?.items)?n.items:[];e.innerHTML='<div class="sectionHead"><div><h2>最新公告</h2><div class="sub">重要變更會優先放在這裡。</div></div><strong>'+esc(n?.badge||'')+'</strong></div><ul class="noticeList">'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'}
+function plan(e){const x=document.querySelector('#event-plan');if(!x)return;x.innerHTML=e?'<h2>活動方案</h2><div class="sub">本次活動資訊以最新公告為準。</div><div class="timeline"><div class="timelineItem"><div class="time">'+esc(e.date_text||'')+' '+esc(e.meeting_time||'')+'</div><div class="tlTitle">報到與集合</div><div class="tlNote">'+esc(e.place||'')+(e.fee?'；'+esc(e.fee):'')+'</div></div><div class="timelineItem"><div class="time">'+esc(e.date_text||'')+'</div><div class="tlTitle">'+esc(e.title||'下一次活動')+'</div><div class="tlNote">詳細流程如有更新，將公告於本活動站。</div></div></div>':'<h2>活動方案</h2><div class="sub" style="margin-bottom:0">目前尚未公布下一次活動方案。</div>'}
+function tick(s){clearInterval(timer);const f=()=>{const t=new Date(s||'').getTime(),d=document.querySelector('#cdD'),h=document.querySelector('#cdH'),m=document.querySelector('#cdM'),q=document.querySelector('#cdS'),z=document.querySelector('#countTitle');if(!d)return;if(!t){z.textContent='日期尚未公布';d.textContent=h.textContent=m.textContent=q.textContent='--';return}let n=t-Date.now();if(n<=0){z.textContent='活動進行中';d.textContent='0';h.textContent=m.textContent=q.textContent='00';return}d.textContent=Math.floor(n/864e5);h.textContent=String(Math.floor(n%864e5/36e5)).padStart(2,'0');m.textContent=String(Math.floor(n%36e5/6e4)).padStart(2,'0');q.textContent=String(Math.floor(n%6e4/1e3)).padStart(2,'0')};f();timer=setInterval(f,1000)}
+function event(e){const x=document.querySelector('#next');if(!x)return;if(!e){x.innerHTML='<div class="sectionHead"><div><h2>下一次活動</h2><div class="sub">目前尚未公布下一次活動；最新消息會優先公告在這裡。</div></div><span class="eventStatus">待公布</span></div><div class="eventBox"><div class="eventTitle">下一次活動資訊整理中</div><div class="sub" style="margin-bottom:0">歷次活動仍可在下方查看，活動資料發布後會自動更新。</div></div>';plan(null);return}x.innerHTML='<div class="sectionHead"><div><h2>下一次活動</h2><div class="sub">活動倒數、報名、集合地點與導航都集中在這裡。</div></div><span class="eventStatus">'+esc(e.status||'籌備中')+'</span></div><div class="nextGrid"><div class="eventBox"><div class="eventTitle">'+esc(e.title||'下一次活動')+'</div><div class="sub">'+esc(e.date_text||'')+'</div><div class="eventDetail"><div class="detail"><small>集合時間</small><b>'+esc(e.meeting_time||'尚未公布')+'</b></div><div class="detail"><small>集合地點</small><b>'+esc(e.place||'尚未公布')+'</b></div><div class="detail"><small>參加對象</small><b>'+esc(e.audience||'')+'</b></div><div class="detail"><small>費用</small><b>'+esc(e.fee||'')+'</b></div></div>'+(e.packing?'<div class="detail" style="margin:10px 0 12px"><small>攜帶物品</small><b style="display:block;line-height:1.7">'+esc(e.packing)+'</b></div>':'')+'<div id="signup" class="actionRow">'+(e.signup_url?'<a class="btn primary" href="'+esc(url(e.signup_url))+'" target="_blank" rel="noopener">立即報名</a>':'<span class="btn disabled">報名尚未開放</span>')+(e.map_url?'<a class="btn green" href="'+esc(url(e.map_url))+'" target="_blank" rel="noopener">Google Maps 導航</a>':'<span class="btn disabled">導航尚未提供</span>')+'</div></div><div class="countdown"><small>距離活動開始</small><div id="countTitle" class="countdownBig">'+esc(e.date_text||'日期尚未公布')+'</div><div class="countCells"><div class="countCell"><b id="cdD">--</b><span>天</span></div><div class="countCell"><b id="cdH">--</b><span>時</span></div><div class="countCell"><b id="cdM">--</b><span>分</span></div><div class="countCell"><b id="cdS">--</b><span>秒</span></div></div></div></div>';plan(e);tick(e.start_at)}
+function archive(a){const x=document.querySelector('#archive .archiveGrid');if(!x)return;a=Array.isArray(a)?a:[];x.innerHTML=a.length?a.map(r=>{let L=(r.photo_url?'<a class="archiveLink" target="_blank" href="'+esc(url(r.photo_url))+'">查看照片 →</a>':'')+(r.album_url?'<a class="archiveLink" target="_blank" href="'+esc(url(r.album_url))+'">開啟活動雲端 →</a>':'')+(r.detail_url?'<a class="archiveLink" href="'+esc(url(r.detail_url))+'">查看活動詳情 →</a>':'');return '<article class="archive"><div class="archiveDate">'+esc(r.date||'')+'</div><div class="archiveTitle">'+esc(r.title||'歷次活動')+'</div><div class="archiveText">'+esc(r.summary||r.description||r.status||'')+'</div>'+L+'</article>'}).join(''):'<article class="archive"><div class="archiveText">目前尚無可公開的歷次活動。</div></article>'}
+async function load(){try{const r=await window.SiteAPI.getPublic(),d=r.data||{};practice(d.practice);notice(d.notice);event(d.event);archive(d.archive)}catch(_){practice({title:'資料暫時無法更新',items:[],note:'請稍後重新整理；網路恢復後會自動讀取最新資料。'});notice({badge:'暫時離線',items:['目前無法取得最新公告。']});event(null);archive([])}finally{document.body.classList.remove('v2-loading')}}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});window.addEventListener('DOMContentLoaded',load);
+})();
+</script></body>
+</html>
