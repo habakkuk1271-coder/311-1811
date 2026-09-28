@@ -1,66 +1,16 @@
-const SHEET_ID = '1t7u7aMsj3imueMN6Qa0OPcaLWnnpg2i7aRLLJCF0NUE';
-
-function doGet(e) {
-  try {
-    if ((e.parameter.action || 'public') !== 'public') throw new Error('Unknown action');
-    return json_({ok:true,data:readPublic_()});
-  } catch (err) { return json_({ok:false,error:String(err.message || err)}); }
-}
-function doPost(e) {
-  try {
-    const body = JSON.parse((e.postData && e.postData.contents) || (e.parameter && e.parameter.payload) || '{}');
-    if (body.action !== 'save') throw new Error('Unknown action');
-    if (!body.token || body.token !== PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN')) throw new Error('Unauthorized');
-    saveEditable_(body.data || {});
-    return json_({ok:true,data:readPublic_()});
-  } catch (err) { return json_({ok:false,error:String(err.message || err)}); }
-}
-function json_(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
-function ss_() { return SpreadsheetApp.openById(SHEET_ID); }
-function table_(name) {
-  const sh=ss_().getSheetByName(name); if(!sh) return [];
-  const values=sh.getDataRange().getValues(); if(values.length<2) return [];
-  const h=values[0].map(String);
-  return values.slice(1).filter(r=>r.some(v=>v!==''&&v!==null)).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]);return o;});
-}
-function readPublic_() {
-  const events=table_('活動');
-  const archive=events.filter(e=>String(e.lifecycle||'').toLowerCase()==='archived');
-  return {notice:objectWithItems_(table_('公告')[0]||{}),practice:objectWithItems_(table_('本週操練')[0]||{}),event:events.filter(e=>String(e.lifecycle||'').toLowerCase()==='current')[0]||null,events:events,archive:archive,templates:table_('活動模板')};
-}
-function objectWithItems_(obj) {
-  const out={}; Object.keys(obj).forEach(k=>out[k]=obj[k]);
-  out.items=Object.keys(obj).filter(k=>k.indexOf('item')===0&&Number(k.slice(4))>0).sort((a,b)=>Number(a.slice(4))-Number(b.slice(4))).map(k=>obj[k]).filter(Boolean).map(String);
-  return out;
-}
-function saveEditable_(data) {
-  if (data.notice) writeObject_('公告',data.notice);
-  if (data.practice) writeObject_('本週操練',data.practice);
-  if (data.event) upsertCurrentEvent_(data.event);
-  if (data.archiveEventId) archiveEvent_(data.archiveEventId);
-}
-function writeObject_(name,obj) {
-  const sh=ss_().getSheetByName(name); if(!sh) throw new Error('Missing sheet: '+name);
-  const h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String);
-  const row=h.map(k=>Array.isArray(obj.items)&&k.indexOf('item')===0?obj.items[Number(k.slice(4))-1]||'':obj[k]===undefined?'':obj[k]);
-  sh.getRange(2,1,1,h.length).setValues([row]);
-}
-function upsertCurrentEvent_(event) {
-  const sh=ss_().getSheetByName('活動'); if(!sh) throw new Error('Missing sheet: 活動');
-  const h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String);
-  const rows=sh.getLastRow()>1?sh.getRange(2,1,sh.getLastRow()-1,h.length).getValues():[];
-  const life=h.indexOf('lifecycle'), id=h.indexOf('event_id');
-  let target=-1;
-  rows.forEach((r,i)=>{if(target<0&&((id>=0&&event.event_id&&String(r[id])===String(event.event_id))||(life>=0&&String(r[life]).toLowerCase()==='current'))) target=i+2;});
-  const row=h.map(k=>k==='lifecycle'?(event.lifecycle||'current'):event[k]===undefined?'':event[k]);
-  if(target>0) sh.getRange(target,1,1,h.length).setValues([row]); else sh.getRange(sh.getLastRow()+1,1,1,h.length).setValues([row]);
-}
-function archiveEvent_(eventId) {
-  const sh=ss_().getSheetByName('活動'); if(!sh) throw new Error('Missing sheet: 活動');
-  const h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String), id=h.indexOf('event_id'), life=h.indexOf('lifecycle');
-  if(id<0||life<0) throw new Error('活動 sheet needs event_id and lifecycle');
-  const rows=sh.getLastRow()>1?sh.getRange(2,1,sh.getLastRow()-1,h.length).getValues():[];
-  const at=rows.findIndex(r=>String(r[id])===String(eventId));
-  if(at<0) throw new Error('Event not found');
-  if(String(rows[at][life]).toLowerCase()!=='archived') sh.getRange(at+2,life+1).setValue('archived');
-}
+const SHEET_ID='1t7u7aMsj3imueMN6Qa0OPcaLWnnpg2i7aRLLJCF0NUE';
+function doGet(e){try{const a=String((e&&e.parameter&&e.parameter.action)||'public');if(a==='health')return json_({ok:true,service:'311-1811-v2',time:new Date().toISOString()});if(a==='public')return json_({ok:true,data:readPublic_(),time:new Date().toISOString()});throw new Error('unknown_action')}catch(err){return json_({ok:false,error:String(err.message||err)})}}
+function doPost(e){try{const b=JSON.parse((e.postData&&e.postData.contents)||(e.parameter&&e.parameter.payload)||'{}');if(!b.token||b.token!==PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN'))throw new Error('Unauthorized');if(b.action==='save')saveEditable_(b.data||{});else if(b.action==='archive')archiveEvent_(b.event_id);else throw new Error('unknown_action');return json_({ok:true,data:readPublic_()})}catch(err){return json_({ok:false,error:String(err.message||err)})}}
+function json_(x){return ContentService.createTextOutput(JSON.stringify(x)).setMimeType(ContentService.MimeType.JSON)}
+function ss_(){return SpreadsheetApp.openById(SHEET_ID)}
+function sheet_(n){const s=ss_().getSheetByName(n);if(!s)throw new Error('Missing sheet: '+n);return s}
+function table_(n){const s=sheet_(n),v=s.getDataRange().getValues();if(v.length<2)return [];const h=v[0].map(String);return v.slice(1).filter(r=>r.some(x=>x!==''&&x!==null)).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]);return o})}
+function itemObject_(o){const x={};Object.keys(o).forEach(k=>x[k]=o[k]);x.items=Object.keys(o).filter(k=>k.indexOf('item')===0&&Number(k.slice(4))>0).sort((a,b)=>Number(a.slice(4))-Number(b.slice(4))).map(k=>o[k]).filter(Boolean).map(String);return x}
+function publicEvent_(e){if(!e)return null;return {event_id:e.event_id,title:e.title,date:e.date_text||'',start_at:e.start_at||'',meeting_time:e.meeting_time||'',location:e.place||'',audience:e.audience||'',fee:e.fee||'',packing:e.packing||'',description:e.status||'',map_url:e.map_url||'',signup_url:e.signup_url||'',lifecycle:e.lifecycle||''}}
+function publicHistory_(e){return {event_id:e.event_id,date:e.date||'',title:e.title||'',description:e.summary||'',photo_url:e.photo_url||'',album_url:e.album_url||'',video_url:e.video_url||'',detail_url:e.detail_url||'',status:e.status||''}}
+function readPublic_(){const events=table_('活動'),current=events.filter(e=>String(e.lifecycle||'').toLowerCase()==='current')[0]||null;return {notice:itemObject_(table_('公告')[0]||{}),practice:itemObject_(table_('本週操練')[0]||{}),event:publicEvent_(current),events:events.map(publicEvent_),archive:table_('歷次活動').map(publicHistory_),templates:table_('活動模板')}}
+function writeObject_(n,o){const s=sheet_(n),h=s.getRange(1,1,1,s.getLastColumn()).getValues()[0].map(String),items=Array.isArray(o.items)?o.items:[];const row=h.map(k=>k.indexOf('item')===0?items[Number(k.slice(4))-1]||'':o[k]===undefined?'':o[k]);s.getRange(2,1,1,h.length).setValues([row])}
+function saveEditable_(d){if(d.notice)writeObject_('公告',d.notice);if(d.practice)writeObject_('本週操練',d.practice);if(d.event)upsertCurrentEvent_(d.event);if(d.archiveEventId)archiveEvent_(d.archiveEventId)}
+function upsertCurrentEvent_(e){const s=sheet_('活動'),h=s.getRange(1,1,1,s.getLastColumn()).getValues()[0].map(String),rows=s.getLastRow()>1?s.getRange(2,1,s.getLastRow()-1,h.length).getValues():[],id=h.indexOf('event_id'),life=h.indexOf('lifecycle');let at=-1;rows.forEach((r,i)=>{if(at<0&&((id>=0&&e.event_id&&String(r[id])===String(e.event_id))||(life>=0&&String(r[life]).toLowerCase()==='current')))at=i+2});const newId=e.event_id||'event-'+Utilities.getUuid();const row=h.map(k=>k==='event_id'?newId:k==='lifecycle'?(e.lifecycle||'current'):e[k]===undefined?'':e[k]);if(at>0)s.getRange(at,1,1,h.length).setValues([row]);else s.getRange(s.getLastRow()+1,1,1,h.length).setValues([row])}
+function archiveEvent_(eventId){if(!eventId)throw new Error('event_id required');const s=sheet_('活動'),h=s.getRange(1,1,1,s.getLastColumn()).getValues()[0].map(String),rows=s.getLastRow()>1?s.getRange(2,1,s.getLastRow()-1,h.length).getValues():[],id=h.indexOf('event_id'),life=h.indexOf('lifecycle'),at=rows.findIndex(r=>String(r[id])===String(eventId));if(at<0)throw new Error('Event not found');if(String(rows[at][life]).toLowerCase()!=='archived')s.getRange(at+2,life+1).setValue('archived');const o={};h.forEach((k,i)=>o[k]=rows[at][i]);upsertHistory_({event_id:o.event_id,date:o.date_text||'',title:o.title||'',summary:o.status||'',photo_url:'',album_url:'',video_url:'',detail_url:'',status:'活動封存'})}
+function upsertHistory_(x){const s=sheet_('歷次活動'),h=s.getRange(1,1,1,s.getLastColumn()).getValues()[0].map(String),rows=s.getLastRow()>1?s.getRange(2,1,s.getLastRow()-1,h.length).getValues():[],id=h.indexOf('event_id'),at=rows.findIndex(r=>String(r[id])===String(x.event_id)),row=h.map(k=>x[k]===undefined?'':x[k]);if(at>=0)s.getRange(at+2,1,1,h.length).setValues([row]);else s.getRange(s.getLastRow()+1,1,1,h.length).setValues([row])}
