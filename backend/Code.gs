@@ -6,8 +6,15 @@ function ss_(){return SpreadsheetApp.openById(SHEET_ID)}
 function sheet_(n){const s=ss_().getSheetByName(n);if(!s)throw new Error('Missing sheet: '+n);return s}
 function table_(n){const s=sheet_(n),v=s.getDataRange().getDisplayValues();if(v.length<2)return [];const h=v[0].map(String);return v.slice(1).filter(r=>r.some(x=>x!==''&&x!==null)).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]);return o})}
 function itemObject_(o){const x={};Object.keys(o).forEach(k=>x[k]=o[k]);x.items=Object.keys(o).filter(k=>k.indexOf('item')===0&&Number(k.slice(4))>0).sort((a,b)=>Number(a.slice(4))-Number(b.slice(4))).map(k=>o[k]).filter(Boolean).map(String);return x}
-function publicEvent_(e){if(!e)return null;return {event_id:e.event_id,title:e.title,date:e.date_text||'',start_at:e.start_at||'',meeting_time:e.meeting_time||'',location:e.place||'',audience:e.audience||'',fee:e.fee||'',packing:e.packing||'',description:e.status||'',map_url:e.map_url||'',signup_url:e.signup_url||'',lifecycle:e.lifecycle||''}}
-function publicHistory_(e){return {event_id:e.event_id,date:e.date||'',title:e.title||'',description:e.summary||'',photo_url:e.photo_url||'',album_url:e.album_url||'',video_url:e.video_url||'',detail_url:e.detail_url||'',status:e.status||''}}
+function publicEvent_(e) {
+  if (!e) return null;
+  return {event_id:e.event_id||'',title:e.title||'',date:e.date_text||'',date_text:e.date_text||'',start_at:e.start_at||'',meeting_time:e.meeting_time||'',location:e.place||'',place:e.place||'',audience:e.audience||'',fee:e.fee||'',packing:e.packing||'',description:e.status||'',status:e.status||'',map_url:e.map_url||'',signup_url:e.signup_url||'',lifecycle:e.lifecycle||''};
+}
+
+function publicHistory_(e) {
+  return {event_id:e.event_id||'',date:e.date||'',title:e.title||'',description:e.summary||'',summary:e.summary||'',photo_url:e.photo_url||'',album_url:e.album_url||'',video_url:e.video_url||'',detail_url:e.detail_url||'',status:e.status||''};
+}
+
 function readPublic_(){const events=table_('活動'),current=events.filter(e=>String(e.lifecycle||'').toLowerCase()==='current')[0]||null;return {notice:itemObject_(table_('公告')[0]||{}),practice:itemObject_(table_('本週操練')[0]||{}),event:publicEvent_(current),events:events.map(publicEvent_),archive:table_('歷次活動').map(publicHistory_),templates:table_('活動模板')}}
 function writeObject_(n,o){const s=sheet_(n),items=Array.isArray(o.items)?o.items:[];let last=s.getLastColumn(),h=s.getRange(1,1,1,last).getValues()[0].map(String);const slots=h.filter(k=>k.indexOf('item')===0&&Number(k.slice(4))>0).length;if(items.length>slots){const count=items.length-slots;s.insertColumnsAfter(last,count);s.getRange(1,last+1,1,count).setValues([Array.from({length:count},(_,i)=>'item'+(slots+i+1))]);last=s.getLastColumn();h=s.getRange(1,1,1,last).getValues()[0].map(String)}const row=h.map(k=>k.indexOf('item')===0?items[Number(k.slice(4))-1]||'':o[k]===undefined?'':o[k]);s.getRange(2,1,1,h.length).setValues([row])}
 function saveEditable_(d){if(d.notice)writeObject_('公告',d.notice);if(d.practice)writeObject_('本週操練',d.practice);if(d.event&&hasEventContent_(d.event))upsertCurrentEvent_(d.event);if(d.archiveEventId)archiveEvent_(d.archiveEventId)}
