@@ -4,7 +4,7 @@ function doPost(e){try{const b=JSON.parse((e.parameter&&e.parameter.payload)||(e
 function json_(x){return ContentService.createTextOutput(JSON.stringify(x)).setMimeType(ContentService.MimeType.JSON)}
 function ss_(){return SpreadsheetApp.openById(SHEET_ID)}
 function sheet_(n){const s=ss_().getSheetByName(n);if(!s)throw new Error('Missing sheet: '+n);return s}
-function table_(n){const s=sheet_(n),v=s.getDataRange().getValues();if(v.length<2)return [];const h=v[0].map(String);return v.slice(1).filter(r=>r.some(x=>x!==''&&x!==null)).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]);return o})}
+function table_(n){const s=sheet_(n),v=s.getDataRange().getDisplayValues();if(v.length<2)return [];const h=v[0].map(String);return v.slice(1).filter(r=>r.some(x=>x!==''&&x!==null)).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]);return o})}
 function itemObject_(o){const x={};Object.keys(o).forEach(k=>x[k]=o[k]);x.items=Object.keys(o).filter(k=>k.indexOf('item')===0&&Number(k.slice(4))>0).sort((a,b)=>Number(a.slice(4))-Number(b.slice(4))).map(k=>o[k]).filter(Boolean).map(String);return x}
 function publicEvent_(e){if(!e)return null;return {event_id:e.event_id,title:e.title,date:e.date_text||'',start_at:e.start_at||'',meeting_time:e.meeting_time||'',location:e.place||'',audience:e.audience||'',fee:e.fee||'',packing:e.packing||'',description:e.status||'',map_url:e.map_url||'',signup_url:e.signup_url||'',lifecycle:e.lifecycle||''}}
 function publicHistory_(e){return {event_id:e.event_id,date:e.date||'',title:e.title||'',description:e.summary||'',photo_url:e.photo_url||'',album_url:e.album_url||'',video_url:e.video_url||'',detail_url:e.detail_url||'',status:e.status||''}}
