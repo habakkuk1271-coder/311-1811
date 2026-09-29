@@ -15,7 +15,11 @@
   async function getPublic(){
     try{
       if(!API_URL) throw new Error('API URL is not configured');
-      const r=await fetch(API_URL+'?action=public&t='+Date.now(),{cache:'no-store'});
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),8000);
+      let r;
+      try{r=await fetch(API_URL+'?action=public&t='+Date.now(),{cache:'no-store',signal:controller.signal});}
+      finally{clearTimeout(timeout);}
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j=await r.json();
       if(!j.ok) throw new Error(j.error||'API error');
