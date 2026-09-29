@@ -1,1 +1,218 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>311／1811 管理後台</title><style>body{max-width:820px;margin:auto;padding:18px;background:#f3f6f8;font:16px -apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;color:#142633}fieldset{border:0;background:#fff;border-radius:14px;margin:14px 0;padding:18px}legend{font-weight:700;font-size:19px}label{display:block;margin:10px 0 4px}input,textarea,select{box-sizing:border-box;width:100%;padding:10px;border:1px solid #b9c8d0;border-radius:8px;font:inherit}textarea{min-height:80px}button{padding:11px 16px;border:0;border-radius:8px;background:#0f637f;color:#fff;font:inherit;margin:8px 6px 0 0}.secondary{background:#516975}.danger{background:#a84b40}.hint{color:#637581}.ok{color:#176b43}.bad{color:#a33}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.grid{grid-template-columns:1fr}}</style></head><body><h1>311／1811 每週管理</h1><p class="hint">每次更新：填好內容 → 輸入 ADMIN_TOKEN → 按發布 → 重新載入確認。驗證碼不會儲存或公開。</p><form id="editor"><fieldset><legend>管理驗證</legend><label>ADMIN_TOKEN<input id="token" type="password" autocomplete="current-password"></label></fieldset><fieldset><legend>公告</legend><label>公告標題<input id="noticeBadge"></label><label>公告項目（每行一項）<textarea id="noticeItems"></textarea></label></fieldset><fieldset><legend>本週操練</legend><label>標題<input id="practiceTitle"></label><label>日期範圍<input id="practiceDate"></label><label>操練項目（每行一項）<textarea id="practiceItems"></textarea></label><label>提醒<input id="practiceNote"></label></fieldset><fieldset><legend>目前活動</legend><label>快速套用活動模板<select id="template"><option value="">不套用模板</option></select></label><button type="button" id="apply" class="secondary">套用模板</button><div class="grid"><label>活動 ID（保留可更新目前活動）<input id="eventId"></label><label>活動名稱<input id="eventTitle"></label><label>日期文字<input id="eventDate"></label><label>開始時間<input id="eventStart" type="datetime-local"></label><label>集合時間<input id="eventMeeting" type="time"></label><label>地點<input id="eventPlace"></label><label>參加對象<input id="eventAudience"></label><label>費用<input id="eventFee"></label></div><label>攜帶物品<input id="eventPacking"></label><label>活動說明<input id="eventStatus"></label><label>地圖連結<input id="eventMap" type="url"></label><label>報名連結<input id="eventSignup" type="url"></label><button type="button" id="archive" class="danger">封存目前活動</button><p class="hint">封存會把目前活動標為 archived，並以活動 ID 寫入／更新歷次活動；不會產生重複紀錄。</p></fieldset><button type="submit">發布更新</button><button type="button" id="reload" class="secondary">重新載入確認</button><p id="status" class="hint"></p></form><iframe name="postframe" hidden></iframe><form id="post" method="post" target="postframe" hidden><input name="payload" id="payload"></form><script src="v2/config.js"></script><script src="v2/api.js"></script><script>(function(){const q=id=>document.getElementById(id),status=q('status');let templates=[];const lines=id=>q(id).value.split('\n').map(x=>x.trim()).filter(Boolean);const set=(id,v)=>q(id).value=v||'';const send=x=>{const token=q('token').value;if(!token){status.className='bad';status.textContent='請輸入 ADMIN_TOKEN';return}q('payload').value=JSON.stringify(Object.assign({token:token},x));q('post').action=String(APP_CONFIG.API_URL).replace(/[/]$/,'');q('post').submit();status.className='ok';status.textContent='已送出。請按「重新載入確認」檢查公開資料。'};function load(){status.className='hint';status.textContent='讀取中…';SiteAPI.getPublic().then(x=>{const d=x.data,n=d.notice||{},p=d.practice||{},e=d.event||{};set('noticeBadge',n.badge);set('noticeItems',(n.items||[]).join('\n'));set('practiceTitle',p.title);set('practiceDate',p.date_range);set('practiceItems',(p.items||[]).join('\n'));set('practiceNote',p.note);set('eventId',e.event_id);set('eventTitle',e.title);set('eventDate',e.date);set('eventStart',e.start_at);set('eventMeeting',e.meeting_time);set('eventPlace',e.location);set('eventAudience',e.audience);set('eventFee',e.fee);set('eventPacking',e.packing);set('eventStatus',e.description);set('eventMap',e.map_url);set('eventSignup',e.signup_url);templates=d.templates||[];q('template').innerHTML='<option value="">不套用模板</option>'+templates.map(t=>'<option value="'+String(t.template_id||'').replace(/"/g,'')+'">'+String(t.name||t.title||'模板')+'</option>').join('');status.className='ok';status.textContent=x.cached?'已載入快取資料':'已載入目前公開內容';}).catch(e=>{status.className='bad';status.textContent='讀取失敗：'+e.message})}q('apply').onclick=()=>{const t=templates.find(x=>x.template_id===q('template').value);if(!t)return;set('eventTitle',t.title);set('eventAudience',t.audience);set('eventFee',t.fee);set('eventPacking',t.packing);status.className='ok';status.textContent='已套用模板，可再修改日期、地點與說明。'};q('archive').onclick=()=>{const id=q('eventId').value;if(!id){status.className='bad';status.textContent='目前沒有可封存的活動';return}if(confirm('確定封存目前活動？'))send({action:'archive',event_id:id})};q('reload').onclick=load;q('editor').onsubmit=e=>{e.preventDefault();const event={event_id:q('eventId').value,title:q('eventTitle').value,date_text:q('eventDate').value,start_at:q('eventStart').value,meeting_time:q('eventMeeting').value,place:q('eventPlace').value,audience:q('eventAudience').value,fee:q('eventFee').value,packing:q('eventPacking').value,status:q('eventStatus').value,map_url:q('eventMap').value,signup_url:q('eventSignup').value,lifecycle:'current'};const data={notice:{badge:q('noticeBadge').value,items:lines('noticeItems')},practice:{title:q('practiceTitle').value,date_range:q('practiceDate').value,items:lines('practiceItems'),note:q('practiceNote').value}};if(event.title||event.date_text||event.place)data.event=event;send({action:'save',data:data})};load();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();</script></body></html>
+<html lang="zh-Hant"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f637f">
+  <title>311／1811 管理後台</title>
+  <style>
+    :root{--ink:#142633;--blue:#0f637f;--muted:#637581;--line:#c9d7df;--bg:#f3f6f8}
+    *{box-sizing:border-box}body{max-width:860px;margin:auto;padding:18px;background:var(--bg);font:16px -apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;color:var(--ink)}
+    h1{margin-bottom:4px}fieldset{border:0;background:#fff;border-radius:14px;margin:14px 0;padding:18px;box-shadow:0 2px 10px #1231}
+    legend{font-weight:800;font-size:19px;padding:0 4px}label{display:block;margin:12px 0 4px;font-weight:650}input,textarea,select{box-sizing:border-box;width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}
+    textarea{min-height:92px;resize:vertical}button{padding:11px 16px;border:0;border-radius:9px;background:var(--blue);color:#fff;font:inherit;font-weight:750;margin:8px 6px 0 0}
+    button.secondary{background:#516975}button.danger{background:#a84b40}button.light{background:#e5eff3;color:#164558}.hint{color:var(--muted);line-height:1.6}.ok{color:#176b43;font-weight:700}.bad{color:#a33;font-weight:700}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.notice{background:#f5fbfd;border-left:4px solid var(--blue);padding:10px 12px;border-radius:8px;margin:8px 0}.small{font-size:13px}.id{background:#f3f6f8;color:#64748b}
+    @media(max-width:600px){body{padding:10px}.grid{grid-template-columns:1fr}fieldset{padding:14px}}
+  </style>
+</head>
+<body>
+  <h1>311／1811 每週管理</h1>
+  <p class="hint">填好內容 → 輸入管理驗證碼 → 按發布。發布後系統會重新讀取公開資料確認；驗證碼不會儲存或公開。</p>
+
+  <form id="editor">
+    <fieldset>
+      <legend>管理驗證</legend>
+      <label for="token">ADMIN_TOKEN</label>
+      <input id="token" type="password" autocomplete="current-password">
+    </fieldset>
+
+    <fieldset>
+      <legend>公告</legend>
+      <label for="noticeBadge">公告標題</label>
+      <input id="noticeBadge" placeholder="例如：本週重要提醒">
+      <label for="noticeItems">公告項目（每行一項）</label>
+      <textarea id="noticeItems"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>本週操練</legend>
+      <div class="notice small">更換「日期範圍」發布新一週時，系統會自動把舊一週內容保存到「操練歷史」，公開首頁仍只顯示本週。</div>
+      <label for="practiceTitle">區塊標題</label>
+      <input id="practiceTitle" placeholder="本週操練項目">
+      <label for="practiceDate">日期範圍</label>
+      <input id="practiceDate" placeholder="例如 9/28～10/4">
+      <label for="practiceItems">操練項目（每行一項）</label>
+      <textarea id="practiceItems"></textarea>
+      <label for="practiceNote">提醒</label>
+      <textarea id="practiceNote"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>目前活動</legend>
+      <div class="notice small">平常直接修改並發布就是更新目前活動。要開始下一個活動時，按「建立下一個活動」；發布時舊活動會自動封存到歷次活動，所有媒體連結會一併保留。</div>
+      <label for="template">快速套用活動模板</label>
+      <select id="template"><option value="">不套用模板</option></select>
+      <button type="button" id="apply" class="secondary">套用模板</button>
+      <button type="button" id="newEvent" class="light">建立下一個活動</button>
+
+      <label for="eventId">目前活動識別碼</label>
+      <input id="eventId" class="id" readonly="">
+      <div class="grid">
+        <div><label for="eventTitle">活動名稱</label><input id="eventTitle"></div>
+        <div><label for="eventDate">日期文字</label><input id="eventDate" placeholder="例如 10/5 主日"></div>
+        <div><label for="eventStart">開始時間</label><input id="eventStart" type="datetime-local"></div>
+        <div><label for="eventMeeting">集合時間</label><input id="eventMeeting" type="time"></div>
+        <div><label for="eventPlace">地點</label><input id="eventPlace"></div>
+        <div><label for="eventAudience">參加對象</label><input id="eventAudience"></div>
+        <div><label for="eventFee">費用</label><input id="eventFee"></div>
+        <div><label for="eventMap">地圖連結</label><input id="eventMap" type="url" placeholder="https://..."></div>
+      </div>
+      <label for="eventPacking">攜帶物品</label>
+      <input id="eventPacking">
+      <label for="eventStatus">活動說明／摘要</label>
+      <textarea id="eventStatus"></textarea>
+      <label for="eventSignup">報名連結</label>
+      <input id="eventSignup" type="url" placeholder="https://...">
+
+      <h3>活動照片／影片（OneDrive）</h3>
+      <p class="hint small">先在 OneDrive 建立「知道連結者可檢視」的分享連結。首頁精選照請貼單張、可直接開啟的圖片網址；完整資料夾則貼在相簿連結。</p>
+      <label for="eventPhoto">精選照片網址</label>
+      <input id="eventPhoto" type="url" placeholder="https://...">
+      <label for="eventAlbum">完整 OneDrive 相簿連結</label>
+      <input id="eventAlbum" type="url" placeholder="https://1drv.ms/...">
+      <label for="eventVideo">精選影片連結（選填）</label>
+      <input id="eventVideo" type="url" placeholder="https://...">
+      <label for="eventDetail">活動詳情連結（選填）</label>
+      <input id="eventDetail" type="url" placeholder="https://...">
+
+      <button type="button" id="archive" class="danger">封存目前活動</button>
+      <p class="hint small">手動封存是備用功能；建立下一個活動並發布時，舊活動會自動封存，不會重複建立歷史紀錄。</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>補充歷次活動內容</legend>
+      <div class="notice small">已封存活動（例如 9/27 烤肉）可在這裡補上精選照片、完整 OneDrive 相簿、影片與詳情。這不會改動目前活動。</div>
+      <label for="archiveEvent">選擇歷次活動</label>
+      <select id="archiveEvent"><option value="">尚未載入歷次活動</option></select>
+      <label for="archiveSummary">活動摘要</label>
+      <textarea id="archiveSummary"></textarea>
+      <label for="archivePhoto">精選照片網址</label>
+      <input id="archivePhoto" type="url" placeholder="https://...">
+      <label for="archiveAlbum">完整 OneDrive 相簿連結</label>
+      <input id="archiveAlbum" type="url" placeholder="https://1drv.ms/...">
+      <label for="archiveVideo">精選影片連結（選填）</label>
+      <input id="archiveVideo" type="url" placeholder="https://...">
+      <label for="archiveDetail">活動詳情連結（選填）</label>
+      <input id="archiveDetail" type="url" placeholder="https://...">
+      <button type="button" id="saveArchive" class="secondary">儲存歷次活動內容</button>
+    </fieldset>
+
+    <button type="submit">發布更新</button>
+    <button type="button" id="reload" class="secondary">重新讀取確認</button>
+    <p id="status" class="hint" aria-live="polite">讀取中…</p>
+  </form>
+
+  <iframe name="postframe" hidden=""></iframe>
+  <form id="post" method="post" target="postframe" hidden=""><input name="payload" id="payload"></form>
+
+  <script src="v2/config.js"></script>
+  <script src="v2/api.js"></script>
+  <script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    const status = $('status');
+    let templates = [], archivedEvents = [];
+    const fields = ['eventTitle','eventDate','eventStart','eventMeeting','eventPlace','eventAudience','eventFee','eventPacking','eventStatus','eventMap','eventSignup','eventPhoto','eventAlbum','eventVideo','eventDetail'];
+    const lines = id => $(id).value.split('\n').map(value => value.trim()).filter(Boolean);
+    const set = (id, value) => { $(id).value = value || ''; };
+    const setStatus = (message, type = 'hint') => { status.className = type; status.textContent = message; };
+
+    function readEvent() {
+      return {
+        event_id:$('eventId').value.trim(), title:$('eventTitle').value.trim(), date_text:$('eventDate').value.trim(),
+        start_at:$('eventStart').value, meeting_time:$('eventMeeting').value, place:$('eventPlace').value.trim(),
+        audience:$('eventAudience').value.trim(), fee:$('eventFee').value.trim(), packing:$('eventPacking').value.trim(),
+        status:$('eventStatus').value.trim(), map_url:$('eventMap').value.trim(), signup_url:$('eventSignup').value.trim(),
+        photo_url:$('eventPhoto').value.trim(), album_url:$('eventAlbum').value.trim(), video_url:$('eventVideo').value.trim(),
+        detail_url:$('eventDetail').value.trim(), lifecycle:'current'
+      };
+    }
+
+    function load(afterPublish = false) {
+      setStatus('讀取中…');
+      SiteAPI.getPublic().then(result => {
+        const data = result.data || {}, notice = data.notice || {}, practice = data.practice || {}, event = data.event || {};
+        set('noticeBadge', notice.badge); set('noticeItems', (notice.items || []).join('\n'));
+        set('practiceTitle', practice.title); set('practiceDate', practice.date_range); set('practiceItems', (practice.items || []).join('\n')); set('practiceNote', practice.note);
+        set('eventId', event.event_id); set('eventTitle', event.title); set('eventDate', event.date_text || event.date);
+        set('eventStart', event.start_at); set('eventMeeting', event.meeting_time); set('eventPlace', event.place || event.location);
+        set('eventAudience', event.audience); set('eventFee', event.fee); set('eventPacking', event.packing); set('eventStatus', event.status || event.description);
+        set('eventMap', event.map_url); set('eventSignup', event.signup_url); set('eventPhoto', event.photo_url); set('eventAlbum', event.album_url);
+        set('eventVideo', event.video_url); set('eventDetail', event.detail_url);
+        templates = data.templates || [];
+        $('template').innerHTML = '<option value="">不套用模板</option>' + templates.map(template => '<option value="' + String(template.template_id || '').replace(/"/g, '') + '">' + String(template.name || template.title || '模板') + '</option>').join('');
+        archivedEvents = data.archive || [];
+        $('archiveEvent').innerHTML = '<option value="">選擇一項歷次活動</option>' + archivedEvents.map(event => '<option value="' + String(event.event_id || '').replace(/"/g, '') + '">' + String(event.date || '') + '｜' + String(event.title || '未命名活動') + '</option>').join('');
+        setStatus(afterPublish ? '已重新讀取公開資料，請確認內容後再離開。' : (result.cached ? '已載入最近快取資料' : '已載入目前公開內容'), 'ok');
+      }).catch(error => setStatus('讀取失敗：' + error.message, 'bad'));
+    }
+
+    function send(payload) {
+      const token = $('token').value;
+      if (!token) return setStatus('請輸入 ADMIN_TOKEN', 'bad');
+      $('payload').value = JSON.stringify(Object.assign({token}, payload));
+      $('post').action = String(APP_CONFIG.API_URL).replace(/[/]$/, '');
+      $('post').submit();
+      setStatus('已送出，正在重新讀取公開資料確認…', 'hint');
+      window.setTimeout(() => load(true), 1200);
+    }
+
+    $('apply').onclick = () => {
+      const template = templates.find(item => item.template_id === $('template').value);
+      if (!template) return;
+      set('eventTitle', template.title); set('eventAudience', template.audience); set('eventFee', template.fee); set('eventPacking', template.packing);
+      setStatus('已套用模板；請補上日期、地點與活動說明。', 'ok');
+    };
+
+    $('newEvent').onclick = () => {
+      if (!confirm('開始建立下一個活動？舊活動會在你填完並發布新活動時自動封存。')) return;
+      set('eventId', '');
+      fields.forEach(id => set(id, ''));
+      setStatus('請填寫下一個活動後按「發布更新」。舊活動尚未封存，直到新活動成功發布。', 'ok');
+    };
+
+    $('archive').onclick = () => {
+      const eventId = $('eventId').value;
+      if (!eventId) return setStatus('目前沒有可封存的活動。', 'bad');
+      if (confirm('確定封存目前活動？公開首頁將不再顯示它為下一次活動。')) send({action:'archive', event_id:eventId});
+    };
+
+    $('archiveEvent').onchange = () => {
+      const archived = archivedEvents.find(event => event.event_id === $('archiveEvent').value);
+      set('archiveSummary', archived && (archived.summary || archived.description));
+      set('archivePhoto', archived && archived.photo_url); set('archiveAlbum', archived && archived.album_url);
+      set('archiveVideo', archived && archived.video_url); set('archiveDetail', archived && archived.detail_url);
+    };
+
+    $('saveArchive').onclick = () => {
+      const eventId = $('archiveEvent').value;
+      if (!eventId) return setStatus('請先選擇一項歷次活動。', 'bad');
+      send({action:'update_archive', archive:{event_id:eventId, summary:$('archiveSummary').value.trim(), photo_url:$('archivePhoto').value.trim(), album_url:$('archiveAlbum').value.trim(), video_url:$('archiveVideo').value.trim(), detail_url:$('archiveDetail').value.trim()}});
+    };
+
+    $('reload').onclick = () => load(false);
+    $('editor').onsubmit = event => {
+      event.preventDefault();
+      const currentEvent = readEvent();
+      const data = {
+        notice:{badge:$('noticeBadge').value.trim(), items:lines('noticeItems')},
+        practice:{title:$('practiceTitle').value.trim(), date_range:$('practiceDate').value.trim(), items:lines('practiceItems'), note:$('practiceNote').value.trim()}
+      };
+      if (currentEvent.title || currentEvent.date_text || currentEvent.place) data.event = currentEvent;
+      send({action:'save', data});
+    };
+    load(false);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  })();
+  </script>
+
+
+</body><div id="codex-agent-overlay-root" data-codex-agent-overlay-root="true"></div></html>
