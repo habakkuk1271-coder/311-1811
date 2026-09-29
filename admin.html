@@ -1,4 +1,6 @@
-<html lang="zh-Hant"><head>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0f637f">
@@ -10,7 +12,7 @@
     legend{font-weight:800;font-size:19px;padding:0 4px}label{display:block;margin:12px 0 4px;font-weight:650}input,textarea,select{box-sizing:border-box;width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}
     textarea{min-height:92px;resize:vertical}button{padding:11px 16px;border:0;border-radius:9px;background:var(--blue);color:#fff;font:inherit;font-weight:750;margin:8px 6px 0 0}
     button.secondary{background:#516975}button.danger{background:#a84b40}button.light{background:#e5eff3;color:#164558}.hint{color:var(--muted);line-height:1.6}.ok{color:#176b43;font-weight:700}.bad{color:#a33;font-weight:700}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.notice{background:#f5fbfd;border-left:4px solid var(--blue);padding:10px 12px;border-radius:8px;margin:8px 0}.small{font-size:13px}.id{background:#f3f6f8;color:#64748b}
-    @media(max-width:600px){body{padding:10px}.grid{grid-template-columns:1fr}fieldset{padding:14px}}
+    @media(max-width:600px){body{padding:10px}.grid{grid-template-columns:1fr}fieldset{padding:14px}}.historyBox{margin-top:12px;padding:10px 12px;background:#f5fbfd;border-radius:8px}.historyBox ul{margin:6px 0 0;padding-left:20px}.historyBox li{margin:4px 0}
   </style>
 </head>
 <body>
@@ -43,6 +45,7 @@
       <textarea id="practiceItems"></textarea>
       <label for="practiceNote">提醒</label>
       <textarea id="practiceNote"></textarea>
+      <div id="practiceHistory" class="historyBox" aria-live="polite"></div>
     </fieldset>
 
     <fieldset>
@@ -54,7 +57,7 @@
       <button type="button" id="newEvent" class="light">建立下一個活動</button>
 
       <label for="eventId">目前活動識別碼</label>
-      <input id="eventId" class="id" readonly="">
+      <input id="eventId" class="id" readonly>
       <div class="grid">
         <div><label for="eventTitle">活動名稱</label><input id="eventTitle"></div>
         <div><label for="eventDate">日期文字</label><input id="eventDate" placeholder="例如 10/5 主日"></div>
@@ -107,11 +110,12 @@
 
     <button type="submit">發布更新</button>
     <button type="button" id="reload" class="secondary">重新讀取確認</button>
-    <p id="status" class="hint" aria-live="polite">讀取中…</p>
+    <button type="button" id="selfTest" class="light">檢查封存流程（不寫入）</button>
+    <p id="status" class="hint" aria-live="polite"></p>
   </form>
 
-  <iframe name="postframe" hidden=""></iframe>
-  <form id="post" method="post" target="postframe" hidden=""><input name="payload" id="payload"></form>
+  <iframe name="postframe" hidden></iframe>
+  <form id="post" method="post" target="postframe" hidden><input name="payload" id="payload"></form>
 
   <script src="v2/config.js"></script>
   <script src="v2/api.js"></script>
@@ -136,6 +140,32 @@
       };
     }
 
+    function renderPracticeHistory(history) {
+      const items = Array.isArray(history) ? history : [];
+      $('practiceHistory').innerHTML = '<strong>已保存的操練歷史</strong>' + (items.length ? '<ul>' + items.map(item => '<li>' + String(item.date_range || '未標示日期') + '｜' + String(item.title || '本週操練') + '</li>').join('') + '</ul>' : '<p class="small hint">目前尚無已封存的操練週次；更換日期範圍發布後會自動出現。</p>');
+    }
+
+    function sameValue(left, right) { return String(left || '').trim() === String(right || '').trim(); }
+    function verifyPayload(payload) {
+      const deadline = Date.now() + 12000;
+      const check = () => SiteAPI.getPublic().then(result => {
+        if (result.cached) throw new Error('仍在等待公開資料更新');
+        const data = result.data || {};
+        if (payload.action === 'save') {
+          const practice = payload.data && payload.data.practice, notice = payload.data && payload.data.notice;
+          if (practice && (!sameValue(data.practice && data.practice.date_range, practice.date_range) || (data.practice.items || []).join('|') !== (practice.items || []).join('|'))) throw new Error('公開操練資料尚未一致');
+          if (notice && (!sameValue(data.notice && data.notice.badge, notice.badge) || (data.notice.items || []).join('|') !== (notice.items || []).join('|'))) throw new Error('公開公告資料尚未一致');
+        }
+        if (payload.action === 'update_archive') {
+          const found = (data.archive || []).find(item => item.event_id === payload.archive.event_id);
+          if (!found || !sameValue(found.photo_url, payload.archive.photo_url) || !sameValue(found.album_url, payload.archive.album_url)) throw new Error('歷次活動資料尚未一致');
+        }
+        if (payload.action === 'archive' && ((data.event || {}).event_id === payload.event_id)) throw new Error('目前活動尚未封存');
+        return result;
+      }).catch(error => Date.now() < deadline ? new Promise(resolve => setTimeout(() => resolve(check()), 1200)) : Promise.reject(error));
+      return check();
+    }
+
     function load(afterPublish = false) {
       setStatus('讀取中…');
       SiteAPI.getPublic().then(result => {
@@ -147,6 +177,7 @@
         set('eventAudience', event.audience); set('eventFee', event.fee); set('eventPacking', event.packing); set('eventStatus', event.status || event.description);
         set('eventMap', event.map_url); set('eventSignup', event.signup_url); set('eventPhoto', event.photo_url); set('eventAlbum', event.album_url);
         set('eventVideo', event.video_url); set('eventDetail', event.detail_url);
+        renderPracticeHistory(data.practice_history);
         templates = data.templates || [];
         $('template').innerHTML = '<option value="">不套用模板</option>' + templates.map(template => '<option value="' + String(template.template_id || '').replace(/"/g, '') + '">' + String(template.name || template.title || '模板') + '</option>').join('');
         archivedEvents = data.archive || [];
@@ -161,8 +192,8 @@
       $('payload').value = JSON.stringify(Object.assign({token}, payload));
       $('post').action = String(APP_CONFIG.API_URL).replace(/[/]$/, '');
       $('post').submit();
-      setStatus('已送出，正在重新讀取公開資料確認…', 'hint');
-      window.setTimeout(() => load(true), 1200);
+      setStatus('已送出，正在比對公開資料確認…', 'hint');
+      verifyPayload(payload).then(() => load(true)).catch(error => setStatus('寫入結果未能確認：' + error.message + '。請按「重新讀取確認」後再決定是否重試。', 'bad'));
     }
 
     $('apply').onclick = () => {
@@ -174,7 +205,7 @@
 
     $('newEvent').onclick = () => {
       if (!confirm('開始建立下一個活動？舊活動會在你填完並發布新活動時自動封存。')) return;
-      set('eventId', '');
+      set('eventId', 'draft-' + (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now()));
       fields.forEach(id => set(id, ''));
       setStatus('請填寫下一個活動後按「發布更新」。舊活動尚未封存，直到新活動成功發布。', 'ok');
     };
@@ -199,6 +230,15 @@
     };
 
     $('reload').onclick = () => load(false);
+    $('selfTest').onclick = () => {
+      const token = $('token').value;
+      if (!token) return setStatus('請輸入 ADMIN_TOKEN 才能執行不寫入檢查。', 'bad');
+      $('payload').value = JSON.stringify({token, action:'self_test'});
+      $('post').action = String(APP_CONFIG.API_URL).replace(/[/]$/, '');
+      $('post').submit();
+      setStatus('封存流程檢查已送出；此檢查不會寫入任何資料。', 'hint');
+      window.setTimeout(() => setStatus('封存流程檢查已完成；若未出現錯誤即可繼續使用。', 'ok'), 1400);
+    };
     $('editor').onsubmit = event => {
       event.preventDefault();
       const currentEvent = readEvent();
@@ -213,6 +253,5 @@
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   })();
   </script>
-
-
-</body><div id="codex-agent-overlay-root" data-codex-agent-overlay-root="true"></div></html>
+</body>
+</html>
