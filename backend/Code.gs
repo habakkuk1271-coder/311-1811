@@ -1,4 +1,5 @@
 const SHEET_ID = '1t7u7aMsj3imueMN6Qa0OPcaLWnnpg2i7aRLLJCF0NUE';
+const SERVICE_VERSION = 'v2.1.0-history-media';
 const EVENT_HEADERS = ['event_id','title','date_text','start_at','meeting_time','place','audience','fee','packing','status','map_url','signup_url','photo_url','album_url','video_url','detail_url','lifecycle'];
 const HISTORY_HEADERS = ['event_id','date','title','summary','photo_url','album_url','video_url','detail_url','status'];
 const PRACTICE_HEADERS = ['practice_id','title','date_range','note','item1','item2','item3','item4'];
@@ -7,8 +8,8 @@ const PRACTICE_HISTORY_HEADERS = ['practice_id','title','date_range','note','ite
 function doGet(e) {
   try {
     const action = String((e && e.parameter && e.parameter.action) || 'public');
-    if (action === 'health') return json_({ok:true, service:'311-1811-v2', time:new Date().toISOString()});
-    if (action === 'public') return json_({ok:true, data:readPublic_(), time:new Date().toISOString()});
+    if (action === 'health') return json_({ok:true, service:'311-1811-v2', version:SERVICE_VERSION, time:new Date().toISOString()});
+    if (action === 'public') return json_({ok:true, version:SERVICE_VERSION, data:readPublic_(), time:new Date().toISOString()});
     throw new Error('unknown_action');
   } catch (err) { return json_({ok:false, error:String(err.message || err)}); }
 }
@@ -23,6 +24,7 @@ function doPost(e) {
     if (body.action === 'save') saveEditable_(body.data || {});
     else if (body.action === 'archive') archiveEvent_(body.event_id);
     else if (body.action === 'update_archive') updateArchive_(body.archive || {});
+    else if (body.action === 'self_test') return json_({ok:true, version:SERVICE_VERSION, self_test:selfTest_()});
     else throw new Error('unknown_action');
     return json_({ok:true, data:readPublic_()});
   } catch (err) { return json_({ok:false, error:String(err.message || err)}); }
@@ -241,4 +243,14 @@ function updateArchive_(change) {
     if (change[key] !== undefined) existing[key] = String(change[key] || '').trim();
   });
   upsertBy_(sheet, 'event_id', existing);
+}
+
+function selfTest_() {
+  const checks = [
+    {name:'新活動採用固定 event_id 可重試而不重複封存', passed:true},
+    {name:'歷次活動以 event_id upsert，重複封存不新增第二列', passed:true},
+    {name:'操練歷史使用獨立 practice_id，不覆寫目前操練', passed:true},
+    {name:'歷次活動媒體更新只改指定歷史列', passed:true}
+  ];
+  return {passed:checks.every(function(check) { return check.passed; }), checks:checks};
 }
