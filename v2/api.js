@@ -15,17 +15,25 @@
   async function getPublic(){
     try{
       if(!API_URL) throw new Error('API URL is not configured');
-      const controller=new AbortController();
-      const timeout=setTimeout(()=>controller.abort(),8000);
-      let r;
-      try{r=await fetch(API_URL+'?action=public&t='+Date.now(),{cache:'no-store',signal:controller.signal});}
-      finally{clearTimeout(timeout);}
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const j=await r.json();
-      if(!j.ok) throw new Error(j.error||'API error');
-      const data=normalize(j.data);
-      localStorage.setItem(K,JSON.stringify({at:Date.now(),data}));
-      return {data,cached:false};
+      let lastError;
+      // Apps Script can take longer on a cold start. Retry before showing the
+      // offline state so a slow first visit does not look like a broken site.
+      for(let attempt=0;attempt<3;attempt++){
+        if(attempt) await new Promise(resolve=>setTimeout(resolve,900*attempt));
+        const controller=new AbortController();
+        const timeout=setTimeout(()=>controller.abort(),12000);
+        try{
+          const r=await fetch(API_URL+'?action=public&t='+Date.now(),{cache:'no-store',signal:controller.signal});
+          if(!r.ok) throw new Error('HTTP '+r.status);
+          const j=await r.json();
+          if(!j.ok) throw new Error(j.error||'API error');
+          const data=normalize(j.data);
+          localStorage.setItem(K,JSON.stringify({at:Date.now(),data}));
+          return {data,cached:false};
+        }catch(e){lastError=e}
+        finally{clearTimeout(timeout)}
+      }
+      throw lastError||new Error('公開資料讀取失敗');
     }catch(e){
       try{const raw=localStorage.getItem(K);if(raw){const c=JSON.parse(raw);return {data:normalize(c.data),cached:true,cachedAt:c.at,error:String(e)}}}catch(_){/* ignore malformed cache */}
       throw e;
