@@ -29,15 +29,15 @@ main{max-width:1160px;margin:auto;padding:14px}.hero{background:linear-gradient(
 .countdown{background:#0d356f;color:#fff;border-radius:16px;padding:15px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:100%}.countdown small{color:#cfe0f5}.countdownBig{font-size:25px;font-weight:950;margin:8px 0}.countCells{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.countCell{background:#ffffff12;border-radius:9px;padding:8px 4px}.countCell b{display:block;font-size:20px}.countCell span{font-size:9px;color:#dce9fb}
 .tabs{display:flex;gap:7px;margin:10px 0}.tab{border:0;border-radius:999px;background:#eef2f6;color:#506070;padding:8px 12px;font-weight:800}.tab.active{background:#0b63ce;color:#fff}.plan{display:none}.plan.active{display:block}.timeline{position:relative;margin-left:9px;padding-left:20px;border-left:2px solid #d9e6f5}.timelineItem{position:relative;padding:0 0 14px}.timelineItem:before{content:"";position:absolute;left:-27px;top:4px;width:12px;height:12px;border-radius:50%;background:#1769d2;border:3px solid #e8f2ff}.time{font-size:11px;font-weight:900;color:#1769d2}.tlTitle{font-weight:850;margin-top:2px}.tlNote{font-size:12px;color:var(--muted);margin-top:2px}
 .mediaGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.photoCard,.videoCard{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff}.photoCard img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}.videoCard video{display:block;width:100%;aspect-ratio:16/10;background:#000}.mediaBody{padding:10px}.mediaTitle{font-weight:850;margin-bottom:7px}.mediaActions{display:flex;gap:7px;flex-wrap:wrap}
-.archiveGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.archive{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.archiveDate{font-size:11px;color:#1769d2;font-weight:900}.archiveTitle{font-weight:900;margin:5px 0}.archiveText{font-size:12px;color:var(--muted);line-height:1.5}.archiveLink{display:inline-block;margin-top:9px;color:#1769d2;font-size:12px;font-weight:800;text-decoration:none}
+.archiveGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.archive{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.archivePhoto{display:block;margin:-12px -12px 10px;overflow:hidden;border-radius:13px 13px 0 0}.archivePhoto img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.archiveDate{font-size:11px;color:#1769d2;font-weight:900}.archiveTitle{font-weight:900;margin:5px 0}.archiveText{font-size:12px;color:var(--muted);line-height:1.5}.archiveLink{display:inline-block;margin-top:9px;color:#1769d2;font-size:12px;font-weight:800;text-decoration:none}
 .qrGrid{display:grid;grid-template-columns:150px 1fr;gap:15px;align-items:center}.qrGrid img{width:150px;height:150px;border:1px solid var(--line);border-radius:14px;padding:6px;background:#fff}.installBox{background:#f7f9fc;border:1px solid var(--line);border-radius:14px;padding:12px}.installBox ol{margin:7px 0 0;padding-left:19px;font-size:12px;line-height:1.7}
 .footer{text-align:center;color:#98a2b3;font-size:11px;padding:10px 0 86px}
 .bottomNav{display:none}
 .modalBack{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:flex-end;justify-content:center}.modalBack.show{display:flex}.modal{background:#fff;width:min(560px,100%);border-radius:20px 20px 0 0;padding:18px;max-height:85vh;overflow:auto}.modal h3{margin:0 0 8px}.close{float:right;border:0;background:#eef2f6;border-radius:999px;width:36px;height:36px;font-weight:900}
 @media(max-width:780px){main{padding:9px}.hero{padding:16px;border-radius:16px}.hero h1{font-size:23px}.heroButtons{display:none}.quickNav{grid-template-columns:repeat(3,1fr)}.nextGrid,.mediaGrid{grid-template-columns:1fr}.archiveGrid{grid-template-columns:1fr}.eventDetail{grid-template-columns:1fr 1fr}.qrGrid{grid-template-columns:110px 1fr}.qrGrid img{width:110px;height:110px}.bottomNav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 5px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #0001}.bottomNav a{text-align:center;text-decoration:none;font-size:9px;color:#667085;font-weight:800}.bottomNav span{display:block;font-size:19px;margin-bottom:2px}}
 </style>
-</head>
-<body>
+<style>.v2-loading main{visibility:visible}</style></head>
+<body class="v2-loading">
 <header>
  <div class="head">
   <div class="brand"><div class="brandMark">311<br>1811</div><div class="brandText"><b>311／1811 青少年活動站</b><small>活動資訊・報名・回顧</small></div></div>
@@ -110,7 +110,7 @@ main{max-width:1160px;margin:auto;padding:14px}.hero{background:linear-gradient(
      <div class="eventDetail">
        <div class="detail"><small>集合時間</small><b>09:30</b></div>
        <div class="detail"><small>集合地點</small><b>裕忠路會所 B 中會場</b></div>
-       <div class="detail"><small>參加對象</small><b>所有青少年</b></div>
+<div class="detail"><small>參加對象</small><b>所有青少年</b></div>
        <div class="detail"><small>費用</small><b>每人 250 元，報到時繳交</b></div>
      </div>
      <div class="detail" style="margin:10px 0 12px">
@@ -160,11 +160,14 @@ main{max-width:1160px;margin:auto;padding:14px}.hero{background:linear-gradient(
 
 <section id="recent" class="card">
  <h2>近期活動回顧</h2><div class="sub">2026/08/22｜AR 躲避球＆外出相調</div>
+ <div id="dynamicRecent"></div>
+ <div id="legacyRecent">
  <div class="mediaGrid">
    <article class="photoCard"><a href="featured-photo.jpg" target="_blank"><img src="featured-photo.jpg" alt="8/22 活動大合照"></a><div class="mediaBody"><div class="mediaTitle">活動大合照</div><div class="mediaActions"><a class="btn secondary" href="featured-photo.jpg" target="_blank">看大圖</a><a class="btn green" href="featured-photo.jpg" download>下載照片</a></div></div></article>
    <article class="videoCard"><video controls playsinline preload="metadata" poster="featured-video-poster.jpg"><source src="featured-video.mp4" type="video/mp4"></video><div class="mediaBody"><div class="mediaTitle">活動精彩影片</div><div class="mediaActions"><a class="btn green" href="featured-video.mp4" download>下載影片</a></div></div></article>
  </div>
  <div class="actionRow" style="margin-top:12px"><a class="btn primary" href="https://1drv.ms/f/c/acfc6696e5eebffa/IgABhg5cP6UKR693dS68dDZWASKFDzL5w2LRSWq5WMZuepo" target="_blank" rel="noopener">開啟完整活動雲端</a><a class="btn secondary" href="#score">查看 8/22 比賽結果</a></div>
+ </div>
 </section>
 
 <section id="score" class="card">
@@ -200,235 +203,21 @@ main{max-width:1160px;margin:auto;padding:14px}.hero{background:linear-gradient(
 <div id="planModal" class="modalBack" onclick="if(event.target===this)closeModal('planModal')"><div class="modal"><button class="close" onclick="closeModal('planModal')">×</button><h3>下一次活動流程</h3><p class="sub">目前尚未公布。之後會在這裡顯示集合時間、車程、活動、用餐與回程等完整時間軸。</p></div></div>
 <div id="installModal" class="modalBack" onclick="if(event.target===this)closeModal('installModal')"><div class="modal"><button class="close" onclick="closeModal('installModal')">×</button><h3>加入手機主畫面</h3><p>iPhone／iPad：用 Safari 開啟本站 → 點下方「分享」按鈕 → 選「加入主畫面」。之後可以像 App 一樣從桌面開啟。</p><p>Android：用 Chrome 開啟本站，瀏覽器通常會提供「安裝」或「新增至主畫面」。</p></div></div>
 
+<script src="v2/config.js"></script>
+<script src="v2/api.js"></script>
 <script>
-(function () {
-  "use strict";
-
-  const SB_URL = "https://kbbmmfhguvwcsdxgixwn.supabase.co";
-  const SB_KEY = "sb_publishable_RCXF6V6pJO6OkcaRoi3WWQ_SOIG82j3";
-  let countdownTimer = null;
-
-  function esc(value) {
-    return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function safeUrl(value) {
-    const s = String(value || "").trim();
-    return /^https:\/\//i.test(s) ? s : "#";
-  }
-
-  function renderPractice(p) {
-    if (!p) return;
-    const hero = document.querySelector(".hero");
-    if (!hero) return;
-    const items = Array.isArray(p.items) ? p.items : [];
-    hero.innerHTML = `
-      <div class="heroTop">
-        <div>
-          <h1>${esc(p.title || "本週操練項目")}</h1>
-          <p><strong>操練日期：${esc(p.date_range || "")}</strong></p>
-          <p style="margin-top:10px;font-size:16px;line-height:1.8">
-            ${items.map((x,i)=>`${i+1}. ${esc(x)}`).join("<br>")}
-          </p>
-          ${p.note ? `<p style="margin-top:8px">${esc(p.note)}</p>` : ""}
-        </div>
-        <div class="heroButtons">
-          <a class="heroBtn" href="#next">下一次活動</a>
-          <a class="heroBtn" href="#recent">活動回顧</a>
-        </div>
-      </div>
-      <div class="heroMeta">
-        <span class="chip">❤️ 愛主操練</span>
-        <span class="chip">📣 本週提醒</span>
-        <span class="chip">🗓️ ${esc(p.date_range || "")}</span>
-        <span class="chip">📱 可加入主畫面</span>
-      </div>`;
-  }
-
-  function renderNotice(n) {
-    if (!n) return;
-    const el = document.getElementById("notice");
-    if (!el) return;
-    const items = Array.isArray(n.items) ? n.items : [];
-    el.innerHTML = `
-      <div class="sectionHead">
-        <div><h2>最新公告</h2><div class="sub">重要變更會優先放在這裡。</div></div>
-        <strong>${esc(n.badge || "")}</strong>
-      </div>
-      <ul class="noticeList">${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
-  }
-
-  function renderEvent(e) {
-    if (!e) return;
-    const el = document.getElementById("next");
-    if (!el) return;
-
-    el.innerHTML = `
-      <div class="sectionHead">
-        <div>
-          <h2>下一次活動</h2>
-          <div class="sub">活動倒數、報名、集合地點與導航都集中在這裡。</div>
-        </div>
-        <span class="eventStatus">${esc(e.status || "籌備中")}</span>
-      </div>
-      <div class="nextGrid">
-        <div class="eventBox">
-          <div class="eventTitle">${esc(e.title || "下一次活動")}</div>
-          <div class="sub">${esc(e.date_text || "")}</div>
-          <div class="eventDetail">
-            <div class="detail"><small>集合時間</small><b>${esc(e.meeting_time || "尚未公布")}</b></div>
-            <div class="detail"><small>集合地點</small><b>${esc(e.place || "尚未公布")}</b></div>
-            <div class="detail"><small>參加對象</small><b>${esc(e.audience || "")}</b></div>
-            <div class="detail"><small>費用</small><b>${esc(e.fee || "")}</b></div>
-          </div>
-          ${e.packing ? `<div class="detail" style="margin:10px 0 12px"><small>攜帶物品</small><b style="display:block;line-height:1.7">${esc(e.packing)}</b></div>` : ""}
-          <div id="signup" class="actionRow">
-            ${e.signup_url ? `<a class="btn primary" href="${esc(safeUrl(e.signup_url))}" target="_blank" rel="noopener">立即報名</a>` : `<span class="btn disabled">報名尚未開放</span>`}
-            ${e.map_url ? `<a class="btn green" href="${esc(safeUrl(e.map_url))}" target="_blank" rel="noopener">Google Maps 導航</a>` : `<span class="btn disabled">導航尚未提供</span>`}
-          </div>
-        </div>
-        <div class="countdown">
-          <small>距離活動開始</small>
-          <div id="countTitle" class="countdownBig">${esc(e.date_text || "日期尚未公布")}</div>
-          <div class="countCells">
-            <div class="countCell"><b id="cdD">--</b><span>天</span></div>
-            <div class="countCell"><b id="cdH">--</b><span>時</span></div>
-            <div class="countCell"><b id="cdM">--</b><span>分</span></div>
-            <div class="countCell"><b id="cdS">--</b><span>秒</span></div>
-          </div>
-        </div>
-      </div>`;
-
-    renderPlan(e);
-    startCountdown(e.start_at);
-  }
-
-  function renderPlan(e) {
-    const el = document.getElementById("event-plan");
-    if (!el) return;
-    el.innerHTML = `
-      <h2>活動方案</h2>
-      <div class="sub">本次活動資訊以最新公告為準。</div>
-      <div class="timeline">
-        <div class="timelineItem">
-          <div class="time">${esc(e.date_text || "")} ${esc(e.meeting_time || "")}</div>
-          <div class="tlTitle">報到與集合</div>
-          <div class="tlNote">${esc(e.place || "")}${e.fee ? "；" + esc(e.fee) : ""}</div>
-        </div>
-        <div class="timelineItem">
-          <div class="time">${esc(e.date_text || "")}</div>
-          <div class="tlTitle">${esc(e.title || "下一次活動")}</div>
-          <div class="tlNote">詳細流程如有更新，將公告於本活動站。</div>
-        </div>
-      </div>`;
-  }
-
-  function startCountdown(startAt) {
-    if (countdownTimer) clearInterval(countdownTimer);
-
-    function update() {
-      const title = document.getElementById("countTitle");
-      const d = document.getElementById("cdD");
-      const h = document.getElementById("cdH");
-      const m = document.getElementById("cdM");
-      const s = document.getElementById("cdS");
-      if (!title || !d || !h || !m || !s) return;
-
-      if (!startAt) {
-        title.textContent = "日期尚未公布";
-        d.textContent = h.textContent = m.textContent = s.textContent = "--";
-        return;
-      }
-
-      const target = new Date(startAt).getTime();
-      if (!Number.isFinite(target)) return;
-      let diff = target - Date.now();
-
-      if (diff <= 0) {
-        title.textContent = "活動進行中";
-        d.textContent = "0"; h.textContent = "00"; m.textContent = "00"; s.textContent = "00";
-        return;
-      }
-
-      const days = Math.floor(diff / 86400000);
-      const hours = Math.floor((diff % 86400000) / 3600000);
-      const minutes = Math.floor((diff % 3600000) / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-      d.textContent = String(days);
-      h.textContent = String(hours).padStart(2,"0");
-      m.textContent = String(minutes).padStart(2,"0");
-      s.textContent = String(seconds).padStart(2,"0");
-    }
-
-    update();
-    countdownTimer = setInterval(update, 1000);
-  }
-
-  async function loadSiteData() {
-    try {
-      const res = await fetch(`${SB_URL}/rest/v1/youth_site_settings?id=eq.main&select=data`, {
-        headers: {
-          "apikey": SB_KEY,
-          "Authorization": "Bearer " + SB_KEY
-        },
-        cache: "no-store"
-      });
-      if (!res.ok) throw new Error("settings fetch failed");
-      const rows = await res.json();
-      const data = rows && rows[0] && rows[0].data;
-      if (!data) return;
-      renderPractice(data.practice);
-      renderNotice(data.notice);
-      renderEvent(data.event);
-    } catch (err) {
-      console.warn("使用網站內建資料：", err);
-      // Static HTML remains as fallback if Supabase is temporarily unavailable.
-      startCountdown("2026-08-29T09:30:00+08:00");
-    }
-  }
-
-  window.shareSite = async function () {
-    const data = {
-      title: "311／1811 青少年活動站",
-      text: "311／1811 青少年活動資訊、報名與活動回顧",
-      url: "https://habakkuk1271-coder.github.io/311-1811/"
-    };
-    if (navigator.share) {
-      try { await navigator.share(data); } catch (e) {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(data.url);
-        alert("網址已複製");
-      } catch (e) {
-        prompt("請複製網址：", data.url);
-      }
-    }
-  };
-
-  window.openPlan = function () {
-    const el = document.getElementById("planModal");
-    if (el) el.classList.add("show");
-  };
-  window.showInstall = function () {
-    const el = document.getElementById("installModal");
-    if (el) el.classList.add("show");
-  };
-  window.closeModal = function (id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("show");
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadSiteData);
-  } else {
-    loadSiteData();
-  }
+(()=>{
+'use strict';let timer;const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));const url=v=>/^https:\/\//i.test(String(v||'').trim())?String(v).trim():'#';
+function practice(p){const h=document.querySelector('.hero');if(!h)return;const a=Array.isArray(p?.items)?p.items:[];h.innerHTML='<div class="heroTop"><div><h1>'+esc(p?.title||'本週操練項目')+'</h1><p><strong>操練日期：'+esc(p?.date_range||'')+'</strong></p><p style="margin-top:10px;font-size:16px;line-height:1.8">'+a.map((x,i)=>(i+1)+'. '+esc(x)).join('<br>')+'</p>'+(p?.note?'<p style="margin-top:8px">'+esc(p.note)+'</p>':'')+'</div><div class="heroButtons"><a class="heroBtn" href="#next">下一次活動</a><a class="heroBtn" href="#recent">活動回顧</a></div></div><div class="heroMeta"><span class="chip">❤️ 愛主操練</span><span class="chip">📣 本週提醒</span><span class="chip">🗓️ '+esc(p?.date_range||'')+'</span><span class="chip">📱 可加入主畫面</span></div>'}
+function notice(n){const e=document.querySelector('#notice');if(!e)return;const a=Array.isArray(n?.items)?n.items:[];e.innerHTML='<div class="sectionHead"><div><h2>最新公告</h2><div class="sub">重要變更會優先放在這裡。</div></div><strong>'+esc(n?.badge||'')+'</strong></div><ul class="noticeList">'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'}
+function plan(e){const x=document.querySelector('#event-plan');if(!x)return;x.innerHTML=e?'<h2>活動方案</h2><div class="sub">本次活動資訊以最新公告為準。</div><div class="timeline"><div class="timelineItem"><div class="time">'+esc(e.date_text||'')+' '+esc(e.meeting_time||'')+'</div><div class="tlTitle">報到與集合</div><div class="tlNote">'+esc(e.place||'')+(e.fee?'；'+esc(e.fee):'')+'</div></div><div class="timelineItem"><div class="time">'+esc(e.date_text||'')+'</div><div class="tlTitle">'+esc(e.title||'下一次活動')+'</div><div class="tlNote">詳細流程如有更新，將公告於本活動站。</div></div></div>':'<h2>活動方案</h2><div class="sub" style="margin-bottom:0">目前尚未公布下一次活動方案。</div>'}
+function tick(s){clearInterval(timer);const f=()=>{const t=new Date(s||'').getTime(),d=document.querySelector('#cdD'),h=document.querySelector('#cdH'),m=document.querySelector('#cdM'),q=document.querySelector('#cdS'),z=document.querySelector('#countTitle');if(!d)return;if(!t){z.textContent='日期尚未公布';d.textContent=h.textContent=m.textContent=q.textContent='--';return}let n=t-Date.now();if(n<=0){z.textContent='活動進行中';d.textContent='0';h.textContent=m.textContent=q.textContent='00';return}d.textContent=Math.floor(n/864e5);h.textContent=String(Math.floor(n%864e5/36e5)).padStart(2,'0');m.textContent=String(Math.floor(n%36e5/6e4)).padStart(2,'0');q.textContent=String(Math.floor(n%6e4/1e3)).padStart(2,'0')};f();timer=setInterval(f,1000)}
+function event(e){const x=document.querySelector('#next');if(!x)return;if(!e){x.innerHTML='<div class="sectionHead"><div><h2>下一次活動</h2><div class="sub">目前尚未公布下一次活動；最新消息會優先公告在這裡。</div></div><span class="eventStatus">待公布</span></div><div class="eventBox"><div class="eventTitle">下一次活動資訊整理中</div><div class="sub" style="margin-bottom:10px">歷次活動仍可在下方查看，活動資料發布後會自動更新。</div><div id="signup" class="actionRow"><span class="btn disabled">報名尚未開放</span></div></div>';plan(null);return}x.innerHTML='<div class="sectionHead"><div><h2>下一次活動</h2><div class="sub">活動倒數、報名、集合地點與導航都集中在這裡。</div></div><span class="eventStatus">'+esc(e.status||'籌備中')+'</span></div><div class="nextGrid"><div class="eventBox"><div class="eventTitle">'+esc(e.title||'下一次活動')+'</div><div class="sub">'+esc(e.date_text||'')+'</div><div class="eventDetail"><div class="detail"><small>集合時間</small><b>'+esc(e.meeting_time||'尚未公布')+'</b></div><div class="detail"><small>集合地點</small><b>'+esc(e.place||'尚未公布')+'</b></div><div class="detail"><small>參加對象</small><b>'+esc(e.audience||'')+'</b></div><div class="detail"><small>費用</small><b>'+esc(e.fee||'')+'</b></div></div>'+(e.packing?'<div class="detail" style="margin:10px 0 12px"><small>攜帶物品</small><b style="display:block;line-height:1.7">'+esc(e.packing)+'</b></div>':'')+'<div id="signup" class="actionRow">'+(e.signup_url?'<a class="btn primary" href="'+esc(url(e.signup_url))+'" target="_blank" rel="noopener">立即報名</a>':'<span class="btn disabled">報名尚未開放</span>')+(e.map_url?'<a class="btn green" href="'+esc(url(e.map_url))+'" target="_blank" rel="noopener">Google Maps 導航</a>':'<span class="btn disabled">導航尚未提供</span>')+'</div></div><div class="countdown"><small>距離活動開始</small><div id="countTitle" class="countdownBig">'+esc(e.date_text||'日期尚未公布')+'</div><div class="countCells"><div class="countCell"><b id="cdD">--</b><span>天</span></div><div class="countCell"><b id="cdH">--</b><span>時</span></div><div class="countCell"><b id="cdM">--</b><span>分</span></div><div class="countCell"><b id="cdS">--</b><span>秒</span></div></div></div></div>';plan(e);tick(e.start_at)}
+function archive(a){const x=document.querySelector('#archive .archiveGrid');if(!x)return;a=Array.isArray(a)?a:[];x.innerHTML=a.length?a.map(r=>{const photo=url(r.photo_url),album=url(r.album_url),detail=url(r.detail_url);let L=(photo!=='#'?'<a class="archiveLink" target="_blank" rel="noopener" href="'+esc(photo)+'">查看照片 →</a>':'')+(album!=='#'?'<a class="archiveLink" target="_blank" rel="noopener" href="'+esc(album)+'">開啟活動雲端 →</a>':'')+(detail!=='#'?'<a class="archiveLink" target="_blank" rel="noopener" href="'+esc(detail)+'">查看活動詳情 →</a>':'');const image=photo!=='#'?'<a class="archivePhoto" target="_blank" rel="noopener" href="'+esc(album!=='#'?album:photo)+'"><img src="'+esc(photo)+'" alt="'+esc(r.title||'活動精選照片')+'"></a>':'';return '<article class="archive">'+image+'<div class="archiveDate">'+esc(r.date||'')+'</div><div class="archiveTitle">'+esc(r.title||'歷次活動')+'</div><div class="archiveText">'+esc(r.summary||r.description||r.status||'')+'</div>'+L+'</article>'}).join(''):'<article class="archive"><div class="archiveText">目前尚無可公開的歷次活動。</div></article>'}
+function recent(a){const x=document.getElementById('dynamicRecent');if(!x)return;a=Array.isArray(a)?a:[];const r=a.find(v=>(v.photo_url||v.album_url||v.video_url)&&!/AR\s*躲避球/.test(String(v.title||'')));if(!r){x.innerHTML='';return}const photo=url(r.photo_url),album=url(r.album_url),video=url(r.video_url);const picture=photo!=='#'?'<article class="photoCard"><a href="'+esc(album!=='#'?album:photo)+'" target="_blank" rel="noopener"><img src="'+esc(photo)+'" alt="'+esc(r.title||'活動精選照片')+'"></a><div class="mediaBody"><div class="mediaTitle">'+esc(r.title||'最新活動精選照片')+'</div><div class="mediaActions"><a class="btn secondary" href="'+esc(photo)+'" target="_blank" rel="noopener">看大圖</a>'+(album!=='#'?'<a class="btn green" href="'+esc(album)+'" target="_blank" rel="noopener">完整相簿</a>':'')+'</div></div></article>':'<article class="photoCard"><div class="mediaBody"><div class="mediaTitle">'+esc(r.title||'最新活動回顧')+'</div><div class="sub">精選照片整理中</div>'+(album!=='#'?'<a class="btn green" href="'+esc(album)+'" target="_blank" rel="noopener">開啟完整相簿</a>':'')+'</div></article>';const movie=video!=='#'?'<article class="videoCard"><div class="mediaBody"><div class="mediaTitle">活動精彩影片</div><div class="sub">已提供精選影片連結。</div><a class="btn green" href="'+esc(video)+'" target="_blank" rel="noopener">觀看精選影片</a></div></article>':'<article class="videoCard"><div class="mediaBody"><div class="mediaTitle">'+esc(r.date||'')+'｜活動回顧</div><div class="sub">'+esc(r.summary||r.description||'活動資料已保存。')+'</div>'+(album!=='#'?'<a class="btn primary" href="'+esc(album)+'" target="_blank" rel="noopener">開啟完整活動雲端</a>':'')+'</div></article>';x.innerHTML='<div class="sub">最新活動回顧｜'+esc(r.date||'')+'</div><div class="mediaGrid">'+picture+movie+'</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="sub">8/22 AR 躲避球＆外出相調</div>'}
+async function load(){try{const r=await window.SiteAPI.getPublic(),d=r.data||{};practice(d.practice);notice(d.notice);event(d.event);recent(d.archive);archive(d.archive)}catch(_){practice({title:'資料暫時無法更新',items:[],note:'請稍後重新整理；網路恢復後會自動讀取最新資料。'});notice({badge:'暫時離線',items:['目前無法取得最新公告。']});event(null);recent([]);archive([])}finally{document.body.classList.remove('v2-loading')}}
+window.shareSite=async function(){const d={title:'311／1811 青少年活動站',text:'311／1811 青少年活動資訊、報名與活動回顧',url:location.href};if(navigator.share){try{await navigator.share(d)}catch(_){}}else{try{await navigator.clipboard.writeText(d.url);alert('網址已複製')}catch(_){prompt('請複製網址：',d.url)}}};window.showInstall=function(){const e=document.getElementById('installModal');if(e)e.classList.add('show')};window.closeModal=function(id){const e=document.getElementById(id);if(e)e.classList.remove('show')};
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});window.addEventListener('DOMContentLoaded',load);
 })();
-</script>
-</body>
+</script></body>
 </html>
